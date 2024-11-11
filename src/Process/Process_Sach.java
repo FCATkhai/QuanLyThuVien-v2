@@ -49,6 +49,7 @@ Connect_database cd = new Connect_database();
 			cn.close();
 			return true;
 		} catch (Exception e) {
+			System.out.println(e);
 			return false;
 		}
 	}

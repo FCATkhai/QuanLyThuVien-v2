@@ -3,7 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/DaiHoc/QuanLyThuVien/src/Main/QuanLyThuVien.java</file>
+            <file>file:/D:/DaiHoc/QuanLyThuVien/src/Main/GUI_ChooseLogin.java</file>
+            <file>file:/D:/DaiHoc/QuanLyThuVien/src/GUI_ThuThu/GUI_ThuThu_Login.java</file>
+            <file>file:/D:/DaiHoc/QuanLyThuVien/src/GUI_NguoiMuon/GUI_NguoiMuon_Login.java</file>
             <file>file:/D:/DaiHoc/QuanLyThuVien/src/GUI_NguoiMuon/GUI_NguoiMuon_Menu.java</file>
+            <file>file:/D:/DaiHoc/QuanLyThuVien/src/GUI_NguoiMuon/GUI_NguoiMuon_Signup.java</file>
         </group>
     </open-files>
 </project-private>
