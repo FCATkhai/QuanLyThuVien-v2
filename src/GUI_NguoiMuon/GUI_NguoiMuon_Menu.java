@@ -5,6 +5,7 @@
 package GUI_NguoiMuon;
 
 import GUI_ThuThu.*;
+import Main.GUI_ChooseLogin;
 import java.awt.CardLayout;
 import java.sql.*;
 import java.util.ArrayList;
@@ -890,8 +891,8 @@ public class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        GUI_NguoiMuon_Login login = new GUI_NguoiMuon_Login();
-
+        GUI_ChooseLogin login = new GUI_ChooseLogin();
+        
         login.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -1016,13 +1017,13 @@ public class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI_ThuThu_Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI_ChooseLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI_ThuThu_Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI_ChooseLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI_ThuThu_Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI_ChooseLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI_ThuThu_Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI_ChooseLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>

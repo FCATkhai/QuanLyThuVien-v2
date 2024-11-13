@@ -278,7 +278,7 @@ public class GUI_NguoiMuon_Signup extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        GUI_NguoiMuon_Login dang_nhap = new GUI_NguoiMuon_Login();
+        GUI_ChooseLogin dang_nhap = new GUI_ChooseLogin();
         dang_nhap.setVisible(true);
         dang_nhap.setLocationRelativeTo(null);
         dispose();

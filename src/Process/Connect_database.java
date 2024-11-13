@@ -13,7 +13,7 @@ public class Connect_database {
 	public static Connection getConnection() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/quan_ly_thu_vien","root","1234");
+			cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/quan_ly_thu_vien","root","1234567890");
 		}
 		catch(ClassNotFoundException | SQLException e)
 		{
@@ -35,6 +35,7 @@ public class Connect_database {
 				kq = true;
 			}
 		} catch (Exception e) {
+                        System.out.println(e.getMessage());
 			return false;
 		}
 		return kq;

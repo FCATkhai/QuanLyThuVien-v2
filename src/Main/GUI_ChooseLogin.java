@@ -2,7 +2,18 @@ package Main;
 
 
 import GUI_NguoiMuon.GUI_NguoiMuon_Login;
-import GUI_ThuThu.GUI_ThuThu_Login;
+import GUI_NguoiMuon.GUI_NguoiMuon_Menu;
+import GUI_NguoiMuon.GUI_NguoiMuon_Signup;
+import GUI_ThuThu.GUI_TrangChu;
+import Process.Connect_database;
+import java.awt.Color;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -21,7 +32,47 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
     public GUI_ChooseLogin() {
         initComponents();
     }
+    public void login(String user, String pass) throws SQLException {
+        StringBuilder sb = new StringBuilder();
+        if(user.isEmpty()) {
+                sb.append("Tài khoản không được để trống\n");
+        }
+        if(pass.isEmpty()) {
+                sb.append("Mật khẩu không được để trống");
+        }
+        if(!sb.isEmpty()) {
+                JOptionPane.showMessageDialog(this, sb.toString());
+        }
+        if(login_connection(user, pass)) {
+                JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
+                GUI_NguoiMuon_Menu trangChu = new GUI_NguoiMuon_Menu(user);
+                trangChu.setLocationRelativeTo(null);  // Giua man hinh
+                trangChu.setVisible(true);
+                dispose();	
+        }
+        else {
+                JOptionPane.showMessageDialog(this, "Đăng nhập thất bại");
+        }
+    }
 
+    private boolean login_connection(String user, String password) {
+        Connection cn = Connect_database.getConnection();
+        boolean kq = false;
+        String sql_login = "select * from user where username = ? and password = ?;";
+        try {
+            PreparedStatement ps = cn.prepareStatement(sql_login);
+            ps.setString(1, user);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                kq = true;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return kq;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,75 +81,208 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        UserAccountInput = new javax.swing.JTextField();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        UserPasswordInput = new javax.swing.JTextField();
+        jPanel7 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-
-        jLabel1.setText("jLabel1");
+        jToggleButton1 = new javax.swing.JToggleButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(500, 350));
+        setResizable(false);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel2.setText("Hệ thống quản lý thư viện");
+        jPanel1.setPreferredSize(new java.awt.Dimension(0, 100));
+        jPanel1.setVerifyInputWhenFocusTarget(false);
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton1.setText("Đăng nhâp với vai trò thủ thư");
+        jPanel4.setPreferredSize(new java.awt.Dimension(300, 200));
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jPanel5.setPreferredSize(new java.awt.Dimension(100, 50));
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        jLabel2.setText("Tài khoản:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.ipadx = 10;
+        jPanel5.add(jLabel2, gridBagConstraints);
+
+        UserAccountInput.setForeground(new java.awt.Color(204, 204, 204));
+        UserAccountInput.setText("Nhập tài khoản...");
+        UserAccountInput.setToolTipText("");
+        UserAccountInput.setPreferredSize(new java.awt.Dimension(200, 30));
+        UserAccountInput.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                UserAccountInputFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                UserAccountInputFocusLost(evt);
+            }
+        });
+        UserAccountInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UserAccountInputActionPerformed(evt);
+            }
+        });
+        jPanel5.add(UserAccountInput, new java.awt.GridBagConstraints());
+
+        jPanel4.add(jPanel5, java.awt.BorderLayout.PAGE_START);
+
+        jPanel6.setPreferredSize(new java.awt.Dimension(100, 25));
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setText("Mật Khẩu:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.ipadx = 10;
+        jPanel6.add(jLabel1, gridBagConstraints);
+
+        UserPasswordInput.setForeground(new java.awt.Color(204, 204, 204));
+        UserPasswordInput.setText("Nhập mật khẩu...");
+        UserPasswordInput.setPreferredSize(new java.awt.Dimension(200, 30));
+        UserPasswordInput.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                UserPasswordInputFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                UserPasswordInputFocusLost(evt);
+            }
+        });
+        UserPasswordInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UserPasswordInputActionPerformed(evt);
+            }
+        });
+        jPanel6.add(UserPasswordInput, new java.awt.GridBagConstraints());
+
+        jPanel4.add(jPanel6, java.awt.BorderLayout.CENTER);
+
+        jPanel7.setPreferredSize(new java.awt.Dimension(529, 80));
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        jButton1.setText("Đăng nhập");
+        jButton1.setPreferredSize(new java.awt.Dimension(140, 30));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        jPanel7.add(jButton1, gridBagConstraints);
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton2.setText("Đăng nhập với vai trò độc giả");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jToggleButton1.setText("Đăng ký");
+        jToggleButton1.setPreferredSize(new java.awt.Dimension(100, 30));
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jToggleButton1ActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        jPanel7.add(jToggleButton1, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel2))
-                .addContainerGap(62, Short.MAX_VALUE))
+        jPanel4.add(jPanel7, java.awt.BorderLayout.PAGE_END);
+
+        jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        jPanel2.setPreferredSize(new java.awt.Dimension(777, 70));
+        jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Hệ thống quản lý thư viện");
+        jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel2.add(jLabel3);
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
+
+        jPanel3.setPreferredSize(new java.awt.Dimension(535, 50));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 535, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel2)
-                .addGap(68, 68, 68)
-                .addComponent(jButton1)
-                .addGap(60, 60, 60)
-                .addComponent(jButton2)
-                .addContainerGap(60, Short.MAX_VALUE))
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
         );
+
+        getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void UserAccountInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserAccountInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UserAccountInputActionPerformed
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        GUI_ThuThu_Login login = new GUI_ThuThu_Login();
-        login.setVisible(true);
-        login.setLocationRelativeTo(null);
-        dispose();
+        String username = UserAccountInput.getText(); // Lấy nội dung (text) từ TextField (UserAccountInput) và gán nó vào username
+        String password = UserPasswordInput.getText(); // Lấy nội dung (text) từ TextField (UserPasswordInput) và gán nó vào password
+        Boolean result = Connect_database.login(username,password); //Đăng nhập bằng username và password trả về kết quả
+        
+        if(result==true){
+            GUI_TrangChu mainPage = new GUI_TrangChu();
+            mainPage.setVisible(true);
+            this.setVisible(false);
+        } else try {
+            this.login(username, password);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        GUI_NguoiMuon_Login login = new GUI_NguoiMuon_Login();
-        login.setVisible(true);
-        login.setLocationRelativeTo(null);
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        GUI_NguoiMuon_Signup signup = new GUI_NguoiMuon_Signup();
+        signup.setVisible(true);
         dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    private void UserPasswordInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserPasswordInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UserPasswordInputActionPerformed
+
+    private void UserAccountInputFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UserAccountInputFocusGained
+        if(UserAccountInput.getText().equals("Nhập tài khoản...")){
+            UserAccountInput.setText("");
+            UserAccountInput.setForeground(new Color(0,0,0));
+        }
+    }//GEN-LAST:event_UserAccountInputFocusGained
+
+    private void UserPasswordInputFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UserPasswordInputFocusGained
+        if(UserPasswordInput.getText().equals("Nhập mật khẩu...")){
+            UserPasswordInput.setText("");
+            UserPasswordInput.setForeground(new Color(0,0,0));
+        }
+    }//GEN-LAST:event_UserPasswordInputFocusGained
+
+    private void UserAccountInputFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UserAccountInputFocusLost
+        if(UserAccountInput.getText().equals("")){
+            UserAccountInput.setText("Nhập tài khoản...");
+            UserAccountInput.setForeground(new Color(204,204,204));
+        }
+    }//GEN-LAST:event_UserAccountInputFocusLost
+
+    private void UserPasswordInputFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UserPasswordInputFocusLost
+        if(UserPasswordInput.getText().equals("")){
+            UserPasswordInput.setText("Nhập mật khẩu...");
+            UserPasswordInput.setForeground(new Color(204,204,204));
+        }
+    }//GEN-LAST:event_UserPasswordInputFocusLost
 
     /**
      * @param args the command line arguments
@@ -136,9 +320,19 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField UserAccountInput;
+    private javax.swing.JTextField UserPasswordInput;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }
