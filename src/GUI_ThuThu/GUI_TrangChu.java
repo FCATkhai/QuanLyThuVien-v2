@@ -60,10 +60,11 @@ public class GUI_TrangChu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(2147483647, 500));
+        setPreferredSize(new java.awt.Dimension(1157, 1000));
         setResizable(false);
-        setSize(new java.awt.Dimension(1280, 500));
+        setSize(new java.awt.Dimension(1280, 800));
 
-        jSplitPane1.setPreferredSize(new java.awt.Dimension(1005, 800));
+        jSplitPane1.setPreferredSize(new java.awt.Dimension(1005, 900));
 
         jPanel1.setBackground(new java.awt.Color(66, 61, 61));
         jPanel1.setPreferredSize(new java.awt.Dimension(200, 574));

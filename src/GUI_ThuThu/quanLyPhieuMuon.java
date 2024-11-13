@@ -14,6 +14,10 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import Object.PhieuMuon;
+import Process.Connect_database;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  *
@@ -42,7 +46,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
             rows.add(tbRow);
         }
         Model.setDataVector(rows, columns);
-        table.setModel(Model);
+        tablePhieuMuon.setModel(Model);
     }
 
     public boolean insertPhieuMuon(String MaPhieuMuon, Date NgayMuon, Date HanTra, String MaSach, String MaNguoiMuon) {
@@ -61,7 +65,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
                 rows.add(tbRow);
             }
             Model.setDataVector(rows, columns);
-            table.setModel(Model);
+            tablePhieuMuon.setModel(Model);
 
             return true;
         }
@@ -70,7 +74,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
         }
     }
 
-    public void updatePhieuMuon(String MaPhieuMuon, Date NgayMuon,Date HanTra, String MaSach, String MaNguoiMuon) {
+    public boolean updatePhieuMuon(String MaPhieuMuon, Date NgayMuon,Date HanTra, String MaSach, String MaNguoiMuon) {
         Model.setRowCount(0);
         if(ppm.updatePhieuMuon(MaPhieuMuon, NgayMuon,HanTra, MaSach, MaNguoiMuon)) {
             ArrayList<PhieuMuon> ls = ppm.getListPhieuMuon();
@@ -86,15 +90,17 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
                 rows.add(tbRow);
             }
             Model.setDataVector(rows, columns);
-            table.setModel(Model);
+            tablePhieuMuon.setModel(Model);
+            return true;
         }
         else {
             System.out.println(false);
+            return false;
         }
 
     }
 
-    public void updatePMNgayTra(Date NgayTra, String MaPhieuMuon) {
+    public boolean updatePMNgayTra(Date NgayTra, String MaPhieuMuon) {
         Model.setRowCount(0);
         if(ppm.updatePhieuMuonNgayTra(NgayTra, MaPhieuMuon)) {
             ArrayList<PhieuMuon> ls = ppm.getListPhieuMuon();
@@ -110,10 +116,12 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
                 rows.add(tbRow);
             }
             Model.setDataVector(rows, columns);
-            table.setModel(Model);
+            tablePhieuMuon.setModel(Model);
+            return true;
         }
-        else {
+        else {       
             System.out.println(false);
+            return false;
         }
 
     }
@@ -134,7 +142,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
                 rows.add(tbRow);
             }
             Model.setDataVector(rows, columns);
-            table.setModel(Model);
+            tablePhieuMuon.setModel(Model);
             return true;
         }
         else {
@@ -143,30 +151,55 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
     }
 
     public boolean delPhieuMuonDaTra() {
-        Model.setRowCount(0);
-        if(ppm.delPhieuMuonDaTra()) {
-            ArrayList<PhieuMuon> ls = ppm.getListPhieuMuon();
-            for (int i = 0; i < ls.size(); i++) {
-                PhieuMuon s = (PhieuMuon) ls.get(i);
-                Vector<Object> tbRow = new Vector<>();
-                tbRow.add(s.getMaPhieuMuon());
-                tbRow.add(s.getNgayMuon());
-                tbRow.add(s.getHanTra());
-                tbRow.add(s.getMaSach());
-                tbRow.add(s.getMaNguoiMuon());
-                tbRow.add(s.getNgayTra());
-                rows.add(tbRow);
-            }
-            Model.setDataVector(rows, columns);
-            table.setModel(Model);
-            return true;
+        // Đặt lại số hàng của Model về 0 để xóa tất cả dữ liệu hiện tại trong bảng
+          Model.setRowCount(0);
 
-        }
-        else {
-            return false;
+          // Xóa phiếu mượn đã trả thông qua phương thức delPhieuMuonDaTra()
+          if (ppm.delPhieuMuonDaTra()) {
+              // Lấy danh sách phiếu mượn mới nhất sau khi xóa
+              ArrayList<PhieuMuon> ls = ppm.getListPhieuMuon();
+
+              // Khởi tạo lại danh sách rows
+              rows.clear();
+
+              // Kiểm tra xem danh sách có rỗng hay không
+              if (ls.isEmpty()) {
+                  JOptionPane.showMessageDialog(null, "Không còn phiếu mượn nào trong danh sách!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+              } else {
+                  // Duyệt qua danh sách và thêm từng phiếu mượn vào rows
+                  for (PhieuMuon s : ls) {
+                      Vector<Object> tbRow = new Vector<>();
+                      tbRow.add(s.getMaPhieuMuon());
+                      tbRow.add(s.getNgayMuon());
+                      tbRow.add(s.getHanTra());
+                      tbRow.add(s.getMaSach());
+                      tbRow.add(s.getMaNguoiMuon());
+                      tbRow.add(s.getNgayTra());
+                      rows.add(tbRow);
+                  }
+              }
+
+              // Đặt dữ liệu mới cho Model và cập nhật bảng
+              Model.setDataVector(rows, columns);
+              tablePhieuMuon.setModel(Model);
+              return true;
+          } else {
+              JOptionPane.showMessageDialog(null, "Xóa thất bại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+              return false;
+          }      
+    }
+    public void getNguoiMuon(JComboBox ComboBox) {
+        ArrayList<String> arr = ppm.getMaNguoiMuon();
+        for (String mds : arr) {
+            cbbMaNguoiMuon.addItem(mds);
         }
     }
-    
+    public void getSach(JComboBox ComboBox) {
+        ArrayList<String> arr = ppm.getSach();
+        for (String mds : arr) {
+            cbbMaSach.addItem(mds);
+        }
+    }
     
     public quanLyPhieuMuon() {
         initComponents();
@@ -176,6 +209,8 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
         columns.add("Mã sách");
         columns.add("Mã người mượn");
         columns.add("Ngày trả");
+        getNguoiMuon(cbbMaNguoiMuon);
+        getSach(cbbMaSach);
         getAllPhieuMuon();
     }
 
@@ -189,191 +224,185 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel4 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txtMaPhieuMuon = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        txtNgayMuon = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtHanTra = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        txtMaSach = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtNgayMuon = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
+        cbbMaNguoiMuon = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        cbbMaSach = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         txtNgayTra = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
         btnLamMoi = new javax.swing.JButton();
-        txtMaNguoiMuon = new javax.swing.JTextField();
         btnXoaPhieuDaTra = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        tablePhieuMuon = new javax.swing.JTable();
+        jPanel8 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        cbbPhieuMuon = new javax.swing.JComboBox<>();
+        txtSearchPhieuMuon = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+
+        setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jPanel7.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel7.setPreferredSize(new java.awt.Dimension(997, 50));
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel1.setText("Quản lý phiếu mượn");
+        jLabel1.setPreferredSize(new java.awt.Dimension(210, 40));
+        jPanel7.add(jLabel1);
+
+        jPanel4.add(jPanel7, java.awt.BorderLayout.PAGE_START);
+
+        jPanel5.setPreferredSize(new java.awt.Dimension(800, 100));
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 100));
+        jPanel1.setLayout(new java.awt.GridLayout(0, 2, 5, 10));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel6.setText("Mã phiếu mượn");
+        jPanel1.add(jLabel6);
 
         txtMaPhieuMuon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel7.setText("Ngày mượn");
-
-        txtNgayMuon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel1.add(txtMaPhieuMuon);
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel8.setText("Hạn trả");
+        jPanel1.add(jLabel8);
 
         txtHanTra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel1.add(txtHanTra);
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel9.setText("Mã sách");
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel7.setText("Ngày mượn");
+        jPanel1.add(jLabel7);
 
-        txtMaSach.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtNgayMuon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel1.add(txtNgayMuon);
+
+        jPanel2.setPreferredSize(new java.awt.Dimension(400, 100));
+        jPanel2.setLayout(new java.awt.GridLayout(0, 2, 5, 10));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel10.setText("Mã người mượn");
+        jPanel2.add(jLabel10);
+
+        jPanel2.add(cbbMaNguoiMuon);
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel9.setText("Mã sách");
+        jPanel2.add(jLabel9);
+
+        jPanel2.add(cbbMaSach);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel11.setText("Ngày trả");
+        jPanel2.add(jLabel11);
 
         txtNgayTra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtNgayTra.setEnabled(false);
+        jPanel2.add(txtNgayTra);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(132, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(133, 133, 133))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+
+        jPanel4.add(jPanel5, java.awt.BorderLayout.CENTER);
+
+        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 5));
 
         btnThem.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnThem.setText("Thêm");
+        btnThem.setPreferredSize(new java.awt.Dimension(100, 30));
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThemActionPerformed(evt);
             }
         });
+        jPanel3.add(btnThem);
 
         btnSua.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnSua.setText("Sửa");
+        btnSua.setPreferredSize(new java.awt.Dimension(100, 30));
         btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSuaActionPerformed(evt);
             }
         });
+        jPanel3.add(btnSua);
 
         btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnXoa.setText("Xoá");
+        btnXoa.setPreferredSize(new java.awt.Dimension(100, 30));
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXoaActionPerformed(evt);
             }
         });
+        jPanel3.add(btnXoa);
 
         btnLamMoi.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnLamMoi.setText("Làm mới");
+        btnLamMoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/refresh (1).png"))); // NOI18N
+        btnLamMoi.setPreferredSize(new java.awt.Dimension(40, 35));
         btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLamMoiActionPerformed(evt);
             }
         });
-
-        txtMaNguoiMuon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel3.add(btnLamMoi);
 
         btnXoaPhieuDaTra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnXoaPhieuDaTra.setText("Xoá phiếu đã trả");
+        btnXoaPhieuDaTra.setPreferredSize(new java.awt.Dimension(180, 30));
         btnXoaPhieuDaTra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXoaPhieuDaTraActionPerformed(evt);
             }
         });
+        jPanel3.add(btnXoaPhieuDaTra);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtHanTra, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtNgayMuon)
-                        .addComponent(txtMaPhieuMuon, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(159, 159, 159)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(69, 69, 69)
-                        .addComponent(txtMaSach, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addGap(76, 76, 76)
-                                .addComponent(txtNgayTra, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtMaNguoiMuon, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(71, Short.MAX_VALUE)
-                .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(74, 74, 74)
-                .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(110, 110, 110)
-                .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(82, 82, 82)
-                .addComponent(btnLamMoi)
-                .addGap(73, 73, 73)
-                .addComponent(btnXoaPhieuDaTra)
-                .addGap(50, 50, 50))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(txtMaSach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMaNguoiMuon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10))
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(txtNgayTra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(txtMaPhieuMuon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(txtNgayMuon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(txtHanTra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnXoa)
-                        .addComponent(btnLamMoi)
-                        .addComponent(btnXoaPhieuDaTra))
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btnThem, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(btnSua)))
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
+        jPanel4.add(jPanel3, java.awt.BorderLayout.PAGE_END);
+
+        add(jPanel4, java.awt.BorderLayout.CENTER);
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setPreferredSize(new java.awt.Dimension(997, 330));
 
-        table.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        table.setModel(new javax.swing.table.DefaultTableModel(
+        tablePhieuMuon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tablePhieuMuon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -384,17 +413,47 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
                 "Mã phiếu mượn", "Ngày mượn", "Hạn trả", "Mã sách", "Mã người mượn", "Ngày trả"
             }
         ));
-        table.setRowHeight(25);
-        table.setShowGrid(true);
-        table.addMouseListener(new java.awt.event.MouseAdapter() {
+        tablePhieuMuon.setRowHeight(25);
+        tablePhieuMuon.setShowGrid(true);
+        tablePhieuMuon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableMouseClicked(evt);
+                tablePhieuMuonMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(table);
+        jScrollPane1.setViewportView(tablePhieuMuon);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Danh sách phiếu mượn");
+        jLabel2.setPreferredSize(new java.awt.Dimension(450, 40));
+        jPanel8.add(jLabel2);
+
+        cbbPhieuMuon.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        cbbPhieuMuon.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã phiếu mượn", "Ngày mượn", "Hạn trả", "Mã sách", "Mã người mượn", "Ngày trả" }));
+        cbbPhieuMuon.setPreferredSize(new java.awt.Dimension(150, 30));
+        cbbPhieuMuon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbPhieuMuonActionPerformed(evt);
+            }
+        });
+        jPanel8.add(cbbPhieuMuon);
+
+        txtSearchPhieuMuon.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txtSearchPhieuMuon.setPreferredSize(new java.awt.Dimension(250, 30));
+        txtSearchPhieuMuon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchPhieuMuonActionPerformed(evt);
+            }
+        });
+        jPanel8.add(txtSearchPhieuMuon);
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/loupe (1).png"))); // NOI18N
+        jButton2.setPreferredSize(new java.awt.Dimension(30, 30));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel8.add(jButton2);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -402,50 +461,36 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 965, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 965, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(62, Short.MAX_VALUE))
-        );
+        add(jPanel6, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+    private void tablePhieuMuonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePhieuMuonMouseClicked
         btnThem.setEnabled(false);
         txtMaPhieuMuon.setEnabled(false);
         btnSua.setEnabled(true);
         btnXoa.setEnabled(true);
         txtNgayTra.setEnabled(true);
-        int index = table.getSelectedRow();
+        int index = tablePhieuMuon.getSelectedRow();
         txtMaPhieuMuon.setText((String)(Model.getValueAt(index, 0)));
         txtNgayMuon.setText( (Model.getValueAt(index, 1)).toString());
         txtHanTra.setText( (Model.getValueAt(index, 2)).toString());
-        txtMaSach.setText(Model.getValueAt(index, 3).toString());
-        txtMaNguoiMuon.setText(Model.getValueAt(index, 4).toString());
+        cbbMaSach.setSelectedItem(Model.getValueAt(index, 3).toString());
+        cbbMaNguoiMuon.setSelectedItem(Model.getValueAt(index, 4).toString());
 
         try {
             txtNgayTra.setText( (Model.getValueAt(index, 5)).toString());
@@ -453,7 +498,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
 
             txtNgayTra.setText(null);
         }
-    }//GEN-LAST:event_tableMouseClicked
+    }//GEN-LAST:event_tablePhieuMuonMouseClicked
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
         btnThem.setEnabled(true);
@@ -465,8 +510,8 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
         txtHanTra.setText(null);
         txtNgayTra.setText(null);
         txtNgayMuon.setText(null);
-        txtMaSach.setText(null);
-        txtMaNguoiMuon.setText(null);
+        cbbMaSach.setSelectedIndex(-1);
+        cbbMaNguoiMuon.setSelectedIndex(-1);
         getAllPhieuMuon();
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
@@ -477,13 +522,13 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
             if (delPhieuMuon(txtMaPhieuMuon.getText())) {
                 JOptionPane.showMessageDialog(null, "Xóa thành công!" , "Thông báo", 1);
                 Process_Sach ps = new Process_Sach();
-                ps.updateSachTrangThai2(txtMaSach.getText());
+                ps.updateSachTrangThai2((String)cbbMaSach.getSelectedItem());
                 txtMaPhieuMuon.setEnabled(true);
                 txtMaPhieuMuon.setText(null);
                 txtHanTra.setText(null);
                 txtNgayMuon.setText(null);
-                txtMaSach.setText(null);
-                txtMaNguoiMuon.setText(null);
+                cbbMaSach.setSelectedItem(null);
+                cbbMaNguoiMuon.setSelectedItem(null);
                 txtNgayTra.setText(null);
                 btnSua.setEnabled(false);
             } else {
@@ -494,56 +539,107 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        int n = JOptionPane.showConfirmDialog(jPanel4, "Bạn muốn sửa?", "Thông báo", JOptionPane.YES_NO_OPTION);
-        if(n == JOptionPane.YES_OPTION) {
+           int n = JOptionPane.showConfirmDialog(jPanel4, "Bạn muốn sửa?", "Thông báo", JOptionPane.YES_NO_OPTION);
+           if (n == JOptionPane.YES_OPTION) {
+               // Kiểm tra dữ liệu đầu vào
+               if (txtMaPhieuMuon.getText().equals("") || txtNgayMuon.getText().equals("") || txtHanTra.getText().equals("") || cbbMaSach.getSelectedIndex() == -1 || cbbMaNguoiMuon.getSelectedIndex() == -1) {
+                   JOptionPane.showMessageDialog(null, "Bạn chưa nhập đủ thông tin!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                   return;
+               }
 
-            if(txtNgayTra.getText().equals(""))
-            {
-                updatePhieuMuon(txtMaPhieuMuon.getText(), Date.valueOf(txtNgayMuon.getText()),Date.valueOf(txtHanTra.getText()), txtMaSach.getText(), txtMaNguoiMuon.getText());
-            }
-            else {
-                updatePMNgayTra(Date.valueOf(txtNgayTra.getText()), txtMaPhieuMuon.getText());
-                Process_Sach ps = new Process_Sach();
-                ps.updateSachTrangThai2(txtMaSach.getText());
+               // Nếu không có ngày trả, thực hiện cập nhật thông thường
+               if (txtNgayTra.getText().equals("")) {
+                   if (updatePhieuMuon(txtMaPhieuMuon.getText(), Date.valueOf(txtNgayMuon.getText()), Date.valueOf(txtHanTra.getText()), (String) cbbMaSach.getSelectedItem(), (String) cbbMaNguoiMuon.getSelectedItem())) {
+                       JOptionPane.showMessageDialog(null, "Cập nhật thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                   } else {
+                       JOptionPane.showMessageDialog(null, "Cập nhật thất bại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                   }
+               } 
+               // Nếu có ngày trả, thực hiện cập nhật ngày trả và trạng thái sách
+               else {
+                   if (updatePMNgayTra(Date.valueOf(txtNgayTra.getText()), txtMaPhieuMuon.getText())) {
+                       Process_Sach ps = new Process_Sach();
+                       ps.updateSachTrangThai2((String) cbbMaSach.getSelectedItem());
+                       JOptionPane.showMessageDialog(null, "Cập nhật ngày trả và trạng thái sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                   } else {
+                       JOptionPane.showMessageDialog(null, "Cập nhật ngày trả thất bại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                   }
+               }
 
-            }
+               // Làm mới giao diện người dùng sau khi cập nhật
+               txtMaPhieuMuon.setText(null);
+               txtNgayMuon.setText(null);
+               txtHanTra.setText(null);
+               txtNgayTra.setText(null);
+               cbbMaSach.setSelectedIndex(-1);
+               cbbMaNguoiMuon.setSelectedIndex(-1);
 
-    }
+               // Gọi phương thức để làm mới bảng dữ liệu sau khi cập nhật
+               getAllPhieuMuon();
+           }
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt){//GEN-FIRST:event_btnThemActionPerformed
-            if (txtMaPhieuMuon.getText().equals("") || txtNgayMuon.getText().equals("") || txtMaSach.getText().equals("") || txtMaNguoiMuon.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Bạn chưa nhập đủ thông tin!", "Thông báo", 1);
-            } else {
-                if (insertPhieuMuon(txtMaPhieuMuon.getText(), Date.valueOf(txtNgayMuon.getText()), Date.valueOf(txtHanTra.getText()), txtMaSach.getText(), txtMaNguoiMuon.getText())) {
-                    JOptionPane.showMessageDialog(null, "Thêm thành công!", "Thông báo", 1);
-                    Process_Sach ps = new Process_Sach();
-                    ps.updateSachTrangThai(txtMaSach.getText());
-                    txtMaPhieuMuon.setText(null);
-                    txtHanTra.setText(null);
-                    txtNgayTra.setText(null);
-                    txtNgayMuon.setText(null);
-                    txtMaSach.setText(null);
-                    txtMaNguoiMuon.setText(null);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Thêm thất bại!", "Thông báo", 1);
-                    getAllPhieuMuon();
-                }
-            }
+        if (txtMaPhieuMuon.getText().isEmpty() || txtNgayMuon.getText().isEmpty() ||
+              cbbMaSach.getSelectedIndex() == -1 || cbbMaNguoiMuon.getSelectedIndex() == -1) {
+              JOptionPane.showMessageDialog(null, "Bạn chưa nhập đủ thông tin!", "Thông báo", 1);
+          } else {
+              try {
+                  // Kiểm tra và chuyển đổi ngày
+                  Date ngayMuon = Date.valueOf(txtNgayMuon.getText());
+                  Date hanTra = Date.valueOf(txtHanTra.getText());
+                  String maSach = (String) cbbMaSach.getSelectedItem();
+                  String maNguoiMuon = (String) cbbMaNguoiMuon.getSelectedItem();
 
+                  // Thêm phiếu mượn vào cơ sở dữ liệu
+                  if (insertPhieuMuon(txtMaPhieuMuon.getText(), ngayMuon, hanTra, maSach, maNguoiMuon)) {
+                      JOptionPane.showMessageDialog(null, "Thêm thành công!", "Thông báo", 1);
+
+                      // Cập nhật trạng thái sách
+                      Process_Sach ps = new Process_Sach();
+                      ps.updateSachTrangThai(maSach);
+
+                      // Xóa dữ liệu giao diện
+                      clearInputFields();
+                  } else {
+                      JOptionPane.showMessageDialog(null, "Thêm thất bại!", "Thông báo", 1);
+                  }
+              } catch (IllegalArgumentException e) {
+                  JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ! (Định dạng yêu cầu: yyyy-MM-dd)", "Thông báo", 1);
+              }
+          }       
     }//GEN-LAST:event_btnThemActionPerformed
-
+    private void clearInputFields() {
+        txtMaPhieuMuon.setText(null);
+        txtHanTra.setText(null);
+        txtNgayTra.setText(null);
+        txtNgayMuon.setText(null);
+        cbbMaSach.setSelectedIndex(-1);
+        cbbMaNguoiMuon.setSelectedIndex(-1);
+    }
     private void btnXoaPhieuDaTraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaPhieuDaTraActionPerformed
-
-            if(delPhieuMuonDaTra()) {
-                JOptionPane.showMessageDialog(null, "Xóa thành công!" , "Thông báo", 1);
-                getAllPhieuMuon();
+        int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa phiếu mượn đã trả không?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (delPhieuMuonDaTra()) {
+                JOptionPane.showMessageDialog(null, "Xóa thành công!", "Thông báo", 1);
+                getAllPhieuMuon();  // Cập nhật lại danh sách sau khi xóa
+            } else {
+                JOptionPane.showMessageDialog(null, "Xóa thất bại!", "Thông báo", 1);
             }
-            else {
-                JOptionPane.showMessageDialog(null, "Xóa thất bại!" , "Thông báo", 1);
-            }
-
+        }  
     }//GEN-LAST:event_btnXoaPhieuDaTraActionPerformed
+
+    private void cbbPhieuMuonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbPhieuMuonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbbPhieuMuonActionPerformed
+
+    private void txtSearchPhieuMuonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchPhieuMuonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchPhieuMuonActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+               
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
 
@@ -554,6 +650,11 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
     private javax.swing.JButton btnXoaPhieuDaTra;
+    private javax.swing.JComboBox<String> cbbMaNguoiMuon;
+    private javax.swing.JComboBox<String> cbbMaSach;
+    private javax.swing.JComboBox<String> cbbPhieuMuon;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -561,15 +662,20 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable table;
+    private javax.swing.JTable tablePhieuMuon;
     private javax.swing.JTextField txtHanTra;
-    private javax.swing.JTextField txtMaNguoiMuon;
     private javax.swing.JTextField txtMaPhieuMuon;
-    private javax.swing.JTextField txtMaSach;
     private javax.swing.JTextField txtNgayMuon;
     private javax.swing.JTextField txtNgayTra;
+    private javax.swing.JTextField txtSearchPhieuMuon;
     // End of variables declaration//GEN-END:variables
 }

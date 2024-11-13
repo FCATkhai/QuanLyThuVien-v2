@@ -237,7 +237,7 @@ public class GUI_NguoiMuon_Signup extends javax.swing.JFrame {
         }
         if(signup_connection(TenNguoiMuon, password, DiaChi, Gmail, SDT)) {
                 JOptionPane.showMessageDialog(this, "Đăng ký thành công");
-                GUI_NguoiMuon_Login gui_NguoiMuon_Login = new GUI_NguoiMuon_Login();
+                GUI_ChooseLogin gui_NguoiMuon_Login = new GUI_ChooseLogin();
                 gui_NguoiMuon_Login.setLocationRelativeTo(null);  // Giua man hinh
                 gui_NguoiMuon_Login.setVisible(true);
                 dispose();	
