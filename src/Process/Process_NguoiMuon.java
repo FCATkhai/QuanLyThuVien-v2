@@ -92,6 +92,7 @@ Connect_database cd = new Connect_database();
 			JOptionPane.showMessageDialog(null, "Xóa thành công!" , "Thông báo", 1);
 			return true;
 		}catch (Exception e) {
+		System.out.println(e);
 			JOptionPane.showMessageDialog(null, "Xóa thất bại!" , "Thông báo", 1);
 			return false;
 		}

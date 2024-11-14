@@ -499,7 +499,7 @@ public class GUI_ThongKe extends JFrame {
 		JButton btnThoat = new JButton("Về trang chủ");
 		btnThoat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GUI_TrangChu trangChu = new GUI_TrangChu();
+				GUI_ThuThu_TrangChu trangChu = new GUI_ThuThu_TrangChu();
 				trangChu.setLocationRelativeTo(null);  // Giua man hinh
 				trangChu.setVisible(true);
 				dispose();
@@ -524,7 +524,7 @@ public class GUI_ThongKe extends JFrame {
 		JButton btnThoat_1 = new JButton("Về trang chủ");
 		btnThoat_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GUI_TrangChu trangChu = new GUI_TrangChu();
+				GUI_ThuThu_TrangChu trangChu = new GUI_ThuThu_TrangChu();
 				trangChu.setLocationRelativeTo(null);  // Giua man hinh
 				trangChu.setVisible(true);
 				dispose();
@@ -625,7 +625,7 @@ public class GUI_ThongKe extends JFrame {
 		JButton btnThoat_3 = new JButton("Về trang chủ");
 		btnThoat_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GUI_TrangChu trangChu = new GUI_TrangChu();
+				GUI_ThuThu_TrangChu trangChu = new GUI_ThuThu_TrangChu();
 				trangChu.setLocationRelativeTo(null);  // Giua man hinh
 				trangChu.setVisible(true);
 				dispose();
@@ -731,7 +731,7 @@ public class GUI_ThongKe extends JFrame {
 		JButton btnThoat_2 = new JButton("Về trang chủ");
 		btnThoat_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GUI_TrangChu trangChu = new GUI_TrangChu();
+				GUI_ThuThu_TrangChu trangChu = new GUI_ThuThu_TrangChu();
 				trangChu.setLocationRelativeTo(null);  // Giua man hinh
 				trangChu.setVisible(true);
 				dispose();
@@ -776,7 +776,7 @@ public class GUI_ThongKe extends JFrame {
 		JButton btnThoat_4 = new JButton("Về trang chủ");
 		btnThoat_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GUI_TrangChu trangChu = new GUI_TrangChu();
+				GUI_ThuThu_TrangChu trangChu = new GUI_ThuThu_TrangChu();
 				trangChu.setLocationRelativeTo(null);  // Giua man hinh
 				trangChu.setVisible(true);
 				dispose();
