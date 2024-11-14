@@ -4,12 +4,11 @@
  */
 package GUI_NguoiMuon;
 
-import GUI_ThuThu.GUI_TrangChu;
 import Main.GUI_ChooseLogin;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 import Process.Connect_database;
 /**
  *

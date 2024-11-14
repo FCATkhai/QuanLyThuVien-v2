@@ -4,22 +4,19 @@
  */
 package GUI_ThuThu;
 
-import Process.Process_DauSach;
 import java.awt.CardLayout;
-import java.util.Vector;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author ASUS
  */
-public class GUI_TrangChu extends javax.swing.JFrame {
+public class GUI_ThuThu_TrangChu extends javax.swing.JFrame {
 
     /**
      * Creates new form HomePage
      */
     CardLayout cardLayout;
-    public GUI_TrangChu() {
+    public GUI_ThuThu_TrangChu() {
         initComponents();
         this.setSize(1280, 720);
         cardLayout = (CardLayout)(UICards.getLayout());
@@ -356,7 +353,7 @@ public class GUI_TrangChu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GUI_TrangChu().setVisible(true);
+                new GUI_ThuThu_TrangChu().setVisible(true);
             }
         });
     }

@@ -164,7 +164,7 @@ public class GUI_ThuThu_Login extends javax.swing.JFrame {
         }
         if(login_connection(user, pass)) {
                 JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
-                GUI_TrangChu trangChu = new GUI_TrangChu();
+                GUI_ThuThu_TrangChu trangChu = new GUI_ThuThu_TrangChu();
                 trangChu.setLocationRelativeTo(null);  // Giua man hinh
                 trangChu.setVisible(true);
                 dispose();	
