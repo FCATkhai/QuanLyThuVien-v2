@@ -1,5 +1,6 @@
 package Process;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -121,11 +122,11 @@ Connect_database cd = new Connect_database();
 	public ArrayList<HashMap<String, String>> getListSachDaMuon(String MaNguoiMuon) {
 		Connection cn = cd.getConnection();
 		ArrayList<HashMap<String, String>> ls = new ArrayList<>();
-		String sql = "select t2.MaPhieuMuon, t1.MaSach as t1_MaSach, t1.TenSach, t2.NgayMuon, t2.HanTra, t2.NgayTra from tb_sach t1, tb_phieumuon t2 where t1.MaSach = t2.MaSach and t2.MaNguoiMuon=?;";
+		String procedureCall  = "{CALL getSachDaMuonByMaNguoiMuon(?)}";
 		try {
-			PreparedStatement ps = (PreparedStatement) cn.prepareStatement(sql);
-			ps.setString(1, MaNguoiMuon);
-			ResultSet rs = ps.executeQuery();
+			CallableStatement cs = cn.prepareCall(procedureCall);
+			cs.setString(1, MaNguoiMuon);
+			ResultSet rs = cs.executeQuery();
 			while (rs.next()) {
 				HashMap<String, String> entry = new HashMap<>();
 				entry.put("MaPhieuMuon", rs.getString("MaPhieuMuon"));
@@ -142,7 +143,7 @@ Connect_database cd = new Connect_database();
 				ls.add(entry);
 			}
 		} catch (Exception e) {
-
+			System.out.println(e);
 		}
 		return ls;
 	}

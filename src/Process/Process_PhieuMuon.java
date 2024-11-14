@@ -31,11 +31,16 @@ public class Process_PhieuMuon {
 		}
 		return ls;
 	}
+	// transaction
 	public boolean insertPhieuMuon(String MaPhieuMuon, Date NgayMuon, Date HanTra, String MaSach, String MaNguoiMuon) {
-		Connection cn = cd.getConnection();
+		Connection cn = null;
 		String sql = "INSERT INTO `tb_phieumuon` (`MaPhieuMuon`, `NgayMuon`, `HanTra`, `MaSach`, `MaNguoiMuon`) VALUES (?, ?, ?, ?, ?);";
+		PreparedStatement ps = null;
 		try {
-			PreparedStatement ps = (PreparedStatement) cn.prepareStatement(sql);
+			cn = cd.getConnection();
+			// Tắt chế độ Auto commit
+			cn.setAutoCommit(false);
+			ps = cn.prepareStatement(sql);
 			if (MaPhieuMuon != null) {
 				ps.setString(1, MaPhieuMuon);
 			} else {
@@ -55,12 +60,32 @@ public class Process_PhieuMuon {
 			ps.setString(4, MaSach);
 			ps.setString(5, MaNguoiMuon);
 			ps.executeUpdate();
-			ps.close();
 
+			cn.commit();
+			System.out.println("transaction thành công");
 			return true;
-		}catch (Exception e) {
-			System.out.println(e);
+		}catch (SQLException e) {
+			if (cn != null) {
+				try {
+					cn.rollback();
+					System.out.println("Transaction bị rollback do lỗi: " + e.getMessage());
+				}
+				catch (SQLException rollbackEx) {
+					rollbackEx.printStackTrace();
+				}
+			}
 			return false;
+		}
+		finally {
+			// Đóng kết nối
+			if (cn != null) {
+				try {
+					cn.setAutoCommit(true); // Bật lại chế độ auto-commit
+					cn.close();
+				} catch (SQLException closeEx) {
+					closeEx.printStackTrace();
+				}
+			}
 		}
 	}
 	
