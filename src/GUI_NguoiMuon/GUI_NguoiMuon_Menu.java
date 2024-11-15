@@ -60,10 +60,12 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
 
         Connection cn = cd.getConnection();
         try{
-            String sql1 = "Select sum(Soluong)  as slsach from tb_dausach;";
-            PreparedStatement ps1 = (PreparedStatement) cn.prepareStatement(sql1);
-            ResultSet rs1 = ps1.executeQuery();
-            if(rs1.next()) labelSLSach.setText(Integer.toString(rs1.getInt("slsach")));           
+            String sql1 = "{ ? = CALL GetTotalBooks() }";
+            CallableStatement cs1 = cn.prepareCall(sql1);
+            cs1.registerOutParameter(1, Types.INTEGER);
+            cs1.execute();
+
+            labelSLSach.setText(Integer.toString(cs1.getInt(1)));
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
