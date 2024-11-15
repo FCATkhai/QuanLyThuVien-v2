@@ -16,9 +16,6 @@ public class QuanLyThuVien {
         GUI_ChooseLogin choose = new GUI_ChooseLogin();
         choose.setVisible(true);
         choose.setLocationRelativeTo(null);
-        
-        
-
     }
     
 }

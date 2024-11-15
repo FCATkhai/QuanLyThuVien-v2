@@ -19,6 +19,7 @@ import Object.Sach;
 import Process.Connect_database;
 import Process.Process_Sach;
 import Process.Process_PhieuMuon;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -109,14 +110,59 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
             }
         }    
     }
+    public boolean insertPhieuMuon(String MaSach, String MaNguoiMuon) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String MaPhieuMuon = null;
+        try {
+            cn = cd.getConnection();
+            String sqlMax = "SELECT MAX(MaPhieuMuon) AS lastPhieuMuon FROM tb_phieumuon";
+            ps = cn.prepareStatement(sqlMax);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String lastPhieuMuon = rs.getString("lastPhieuMuon");
+                if (lastPhieuMuon == null || lastPhieuMuon.isEmpty()) {
+                    MaPhieuMuon = "P001";
+                } else {
+                    String numericPart = lastPhieuMuon.substring(1);
+                    int nextNumber = Integer.parseInt(numericPart) + 1;
+                    MaPhieuMuon = "P" + String.format("%03d", nextNumber);
+                }
+            }
+
+            String sqlInsert = "INSERT INTO tb_phieumuon (MaPhieuMuon, NgayMuon, HanTra, MaSach, MaNguoiMuon) "
+                             + "VALUES (?, NOW(), DATE_ADD(NOW(), INTERVAL 7 DAY), ?, ?)";
+            ps = cn.prepareStatement(sqlInsert);
+            ps.setString(1, MaPhieuMuon);
+            ps.setString(2, MaSach);
+            ps.setString(3, MaNguoiMuon);
+            ps.executeUpdate();
+
+            
+
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error while inserting PhieuMuon: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (cn != null) cn.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+    }
 
     // Muon Card
     public void getTableMuon() {
-        Model1.setRowCount(0);
-
         ArrayList<Sach> ls = ps.getListSach();
+        Model1.setRowCount(0);
         for (int i = 0; i < ls.size(); i++) {
-            Sach s = (Sach) ls.get(i);
+            Sach s = ls.get(i);
             Vector<Object> tbRow = new Vector<>();
             tbRow.add(s.getMaSach());
             tbRow.add(s.getTenSach());
@@ -128,18 +174,9 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         tableMuon.setModel(Model1);
     }
 
-    public boolean insertPhieuMuon(String MaSach, String MaNguoiMuon) {
-        Model1.setRowCount(0);
+    // Method to insert a loan record (PhieuMuon)
+    
 
-        if(ppm.insertPhieuMuon(null, null, null, MaSach, MaNguoiMuon)) {
-
-
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
     public boolean updatePMNgayTra(String MaPhieuMuon) {
         if(ppm.updatePhieuMuonNgayTra(null, MaPhieuMuon)) {
             return true;
@@ -161,10 +198,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
             tbRow.add(entry.get("TenSach"));
             tbRow.add(entry.get("NgayMuon"));
             tbRow.add(entry.get("HanTra"));
-            // TODO: SUA LOI CHO NAY
-//            System.out.println((entry.get("NgayTra")) != null);
             tbRow.add(entry.get("NgayTra"));
-//            tbRow.add(Objects.equals(entry.get("NgayTra"), null) ? "hello" : "hello1");
             tbRow.add(entry.get("TrangThai"));
 
             rowsTra.add(tbRow);
@@ -173,20 +207,26 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         tableTra.setModel(Model2);
     }
 
-    public GUI_NguoiMuon_Menu(String MaNguoiMuon) throws SQLException {
+    public GUI_NguoiMuon_Menu(String MaNguoiMuon) throws SQLException {   
         initComponents();
+        this.MaNguoiMuon = MaNguoiMuon;
         getTTNguoiMuon(MaNguoiMuon);
         getSLSach();
         getSLSachDaMuon(MaNguoiMuon);
-        Vector<String> columns1 = new Vector<>();
-        columns1.add("Mã Đầu Sách");
-        columns1.add("Tên Sách");
-        columns1.add("Số Lượng");
-        columns1.add("Thể Loại");
-        columns1.add("Tác Giả");
-        columns1.add("NXB");
-        columns1.add("Năm XB");
-
+        btnMuon.setEnabled(false);
+        columnsMuon.add("Mã Sách");
+        columnsMuon.add("Tên sách");
+        columnsMuon.add("Trạng thái");
+        columnsMuon.add("Mã đầu sách");
+        getTableMuon();
+        columnsTra.add("Mã Sách");
+        columnsTra.add("Tên sách");
+        columnsTra.add("Mã đầu sách");
+        columnsTra.add("Ngày mượn");
+        columnsTra.add("Hạn trả");
+        columnsTra.add("Ngày trả");
+        columnsTra.add("Trạng thái");
+        getTableSachDaMuon();
     }
 
     /**
@@ -235,10 +275,6 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         labelSDT = new javax.swing.JLabel();
         borrowCard = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        btnMuon = new javax.swing.JButton();
-        btnReset = new javax.swing.JButton();
-        btnSearch = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -248,6 +284,13 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableMuon = new javax.swing.JTable();
+        jPanel18 = new javax.swing.JPanel();
+        btnMuon = new javax.swing.JButton();
+        jLabel19 = new javax.swing.JLabel();
+        btnReset = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        jLabel20 = new javax.swing.JLabel();
         returnCard = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
@@ -262,23 +305,28 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         labelNgayMuon_TraSach = new javax.swing.JLabel();
         labelHanTra_TraSach = new javax.swing.JLabel();
         labelNgayTra_TraSach = new javax.swing.JLabel();
-        btnTra = new javax.swing.JButton();
-        btnReset_Tra = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         labelMaPhieuMuon_Tra = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableTra = new javax.swing.JTable();
         jLabel25 = new javax.swing.JLabel();
+        jPanel19 = new javax.swing.JPanel();
+        btnTra = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        btnReset_Tra = new javax.swing.JButton();
+        jTextField2 = new javax.swing.JTextField();
+        btnSearch1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         labelXinChao = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1280, 700));
+        setPreferredSize(new java.awt.Dimension(1280, 750));
         setResizable(false);
-        setSize(new java.awt.Dimension(1280, 720));
+        setSize(new java.awt.Dimension(1280, 800));
 
-        jSplitPane1.setPreferredSize(new java.awt.Dimension(500, 1035));
+        jSplitPane1.setPreferredSize(new java.awt.Dimension(500, 1200));
 
         jPanel1.setBackground(new java.awt.Color(66, 61, 61));
         jPanel1.setPreferredSize(new java.awt.Dimension(250, 1035));
@@ -534,31 +582,6 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         borrowCard.setBackground(new java.awt.Color(255, 255, 255));
         borrowCard.setPreferredSize(new java.awt.Dimension(1000, 701));
 
-        btnMuon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnMuon.setText("Mượn");
-        btnMuon.setEnabled(false);
-        btnMuon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMuonActionPerformed(evt);
-            }
-        });
-
-        btnReset.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnReset.setText("Làm mới");
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnResetActionPerformed(evt);
-            }
-        });
-
-        btnSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnSearch.setText("Tìm kiếm");
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Mã sách:");
 
@@ -578,58 +601,6 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         labelTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         labelTrangThai.setText("...");
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(100, 100, 100)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(labelTrangThai)
-                            .addComponent(labelTenSach, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
-                            .addComponent(labelMaSach, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(18, 18, 18)
-                .addComponent(btnSearch)
-                .addGap(94, 94, 94)
-                .addComponent(btnMuon)
-                .addGap(77, 77, 77)
-                .addComponent(btnReset)
-                .addContainerGap(300, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(labelMaSach))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(labelTenSach))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(labelTrangThai))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnReset)
-                    .addComponent(btnMuon)
-                    .addComponent(btnSearch)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
-        );
-
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
         tableMuon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -641,7 +612,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "", "Title 2", "Title 3", "Title 4"
             }
         ));
         tableMuon.setRowHeight(25);
@@ -653,21 +624,114 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableMuon);
 
+        btnMuon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnMuon.setText("Mượn");
+        btnMuon.setEnabled(false);
+        btnMuon.setPreferredSize(new java.awt.Dimension(150, 35));
+        btnMuon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMuonActionPerformed(evt);
+            }
+        });
+        jPanel18.add(btnMuon);
+
+        jLabel19.setPreferredSize(new java.awt.Dimension(250, 0));
+        jPanel18.add(jLabel19);
+
+        btnReset.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/refresh (1).png"))); // NOI18N
+        btnReset.setPreferredSize(new java.awt.Dimension(40, 35));
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+        jPanel18.add(btnReset);
+
+        jTextField1.setPreferredSize(new java.awt.Dimension(250, 30));
+        jPanel18.add(jTextField1);
+
+        btnSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/loupe (1).png"))); // NOI18N
+        btnSearch.setText("Tìm");
+        btnSearch.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        btnSearch.setPreferredSize(new java.awt.Dimension(100, 30));
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+        jPanel18.add(btnSearch);
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(85, 85, 85)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 828, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(169, Short.MAX_VALUE))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, 828, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 828, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addContainerGap()
+                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(451, Short.MAX_VALUE))
+                .addContainerGap(445, Short.MAX_VALUE))
+        );
+
+        jLabel20.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        jLabel20.setText("Chức năng mượn sách");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(374, 374, 374)
+                        .addComponent(jLabel20))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(labelTenSach, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(labelMaSach, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(labelTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(244, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jLabel20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(labelMaSach))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(labelTenSach))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(labelTrangThai))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
 
         javax.swing.GroupLayout borrowCardLayout = new javax.swing.GroupLayout(borrowCard);
@@ -675,17 +739,15 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         borrowCardLayout.setHorizontalGroup(
             borrowCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(borrowCardLayout.createSequentialGroup()
-                .addGroup(borrowCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         borrowCardLayout.setVerticalGroup(
             borrowCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(borrowCardLayout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(796, 796, 796))
         );
 
         UICards.add(borrowCard, "borrowCard");
@@ -717,7 +779,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         labelTenSach_TraSach.setText("...");
 
         labelTrangThai_TraSach.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        labelTrangThai_TraSach.setText("jLabel21");
+        labelTrangThai_TraSach.setText("...");
 
         labelNgayMuon_TraSach.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         labelNgayMuon_TraSach.setText("...");
@@ -728,28 +790,14 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         labelNgayTra_TraSach.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         labelNgayTra_TraSach.setText("....");
 
-        btnTra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnTra.setText("Trả sách");
-        btnTra.setEnabled(false);
-        btnTra.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTraActionPerformed(evt);
-            }
-        });
-
-        btnReset_Tra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnReset_Tra.setText("Làm mới");
-        btnReset_Tra.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReset_TraActionPerformed(evt);
-            }
-        });
-
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel12.setText("Mã phiếu mượn");
 
         labelMaPhieuMuon_Tra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         labelMaPhieuMuon_Tra.setText("...");
+
+        jLabel22.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        jLabel22.setText("Chức năng trả sách");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -758,7 +806,10 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
+                        .addGap(308, 308, 308)
+                        .addComponent(jLabel22))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(152, 152, 152)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addComponent(jLabel18)
@@ -784,18 +835,15 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(labelNgayMuon_TraSach, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(labelHanTra_TraSach, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(labelNgayTra_TraSach, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(492, 492, 492)
-                        .addComponent(btnTra)
-                        .addGap(58, 58, 58)
-                        .addComponent(btnReset_Tra)))
-                .addContainerGap(930, Short.MAX_VALUE))
+                            .addComponent(labelNgayTra_TraSach, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addContainerGap()
+                .addComponent(jLabel22)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -822,11 +870,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                                         .addComponent(labelHanTra_TraSach)))
                                 .addGap(33, 33, 33)
                                 .addComponent(labelNgayTra_TraSach)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnTra)
-                            .addComponent(btnReset_Tra))
-                        .addGap(24, 24, 24))
+                        .addGap(56, 56, 56))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(56, 56, 56)
                         .addComponent(jLabel13)
@@ -835,8 +879,8 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                         .addGap(33, 33, 33)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel18)
-                            .addComponent(labelTrangThai_TraSach))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(labelTrangThai_TraSach))))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
@@ -864,28 +908,68 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel25.setText("Danh sách những quyển sách đã mượn");
 
+        btnTra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnTra.setText("Trả sách");
+        btnTra.setEnabled(false);
+        btnTra.setPreferredSize(new java.awt.Dimension(150, 35));
+        btnTra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTraActionPerformed(evt);
+            }
+        });
+        jPanel19.add(btnTra);
+
+        jLabel21.setPreferredSize(new java.awt.Dimension(400, 0));
+        jPanel19.add(jLabel21);
+
+        btnReset_Tra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnReset_Tra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/refresh (1).png"))); // NOI18N
+        btnReset_Tra.setPreferredSize(new java.awt.Dimension(40, 35));
+        btnReset_Tra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReset_TraActionPerformed(evt);
+            }
+        });
+        jPanel19.add(btnReset_Tra);
+
+        jTextField2.setPreferredSize(new java.awt.Dimension(250, 30));
+        jPanel19.add(jTextField2);
+
+        btnSearch1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnSearch1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/loupe (1).png"))); // NOI18N
+        btnSearch1.setText("Tìm");
+        btnSearch1.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        btnSearch1.setPreferredSize(new java.awt.Dimension(100, 30));
+        btnSearch1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearch1ActionPerformed(evt);
+            }
+        });
+        jPanel19.add(btnSearch1);
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel25))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane2)
+                        .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel25))
+                .addContainerGap(697, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel25)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(479, Short.MAX_VALUE))
+                .addContainerGap(1295, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout returnCardLayout = new javax.swing.GroupLayout(returnCard);
@@ -899,7 +983,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
             returnCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(returnCardLayout.createSequentialGroup()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -923,9 +1007,9 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(1299, Short.MAX_VALUE)
+                .addContainerGap(1229, Short.MAX_VALUE)
                 .addComponent(labelXinChao, javax.swing.GroupLayout.PREFERRED_SIZE, 755, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(76, 76, 76))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -957,7 +1041,10 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        cardLayout.show(UICards, "returnCard");
+        UICards.removeAll();
+        UICards.add(returnCard);
+        UICards.revalidate();
+        UICards.repaint(); 
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -990,28 +1077,45 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         labelMaSach.setText(null);
         labelTenSach.setText(null);
         labelTrangThai.setText(null);
-
         btnMuon.setEnabled(false);
         getTableMuon();
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnMuonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMuonActionPerformed
-        int n = JOptionPane.showConfirmDialog(jPanel6, "Bạn muốn mượn sách?", "Thông báo", JOptionPane.YES_NO_OPTION);
-        if(n == JOptionPane.YES_OPTION) {
-            if (insertPhieuMuon(labelMaSach.getText(), this.MaNguoiMuon)) {
-                JOptionPane.showMessageDialog(null, "Mượn sách thành công!", "Thông báo", 1);
-                Process_Sach ps = new Process_Sach();
-                ps.updateSachTrangThai(labelMaSach.getText());
-                labelMaSach.setText(null);
-                labelTenSach.setText(null);
-                labelTrangThai.setText(null);
+       int n = JOptionPane.showConfirmDialog(jPanel6, "Bạn muốn mượn sách?", "Thông báo", JOptionPane.YES_NO_OPTION);
 
-                btnMuon.setEnabled(false);
-            } else {
-                JOptionPane.showMessageDialog(null, "Mượn sách thất bại!", "Thông báo", 1);
-            }
-            getTableMuon();
-        }
+       if (n == JOptionPane.YES_OPTION) {
+           // Check if MaSach and MaNguoiMuon are valid (not empty or null)
+           String maSach = labelMaSach.getText();
+           String maNguoiMuon = this.MaNguoiMuon;
+
+           if (maSach == null || maSach.isEmpty() || maNguoiMuon == null || maNguoiMuon.isEmpty()) {
+               JOptionPane.showMessageDialog(null, "Thông tin không hợp lệ! Vui lòng chọn sách và người mượn.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+               return;
+           }
+
+           // Attempt to insert the loan record
+           if (insertPhieuMuon(maSach, maNguoiMuon)) {
+               // Update the book status after successful loan
+               Process_Sach ps = new Process_Sach();
+               ps.updateSachTrangThai(maSach);
+
+               // Clear the labels for the next operation
+               labelMaSach.setText(null);
+               labelTenSach.setText(null);
+               labelTrangThai.setText(null);
+
+               // Disable the button to prevent multiple borrowing attempts for the same book
+               btnMuon.setEnabled(false);
+
+               // Show success message
+               JOptionPane.showMessageDialog(null, "Mượn sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+               getTableMuon();
+           } else {
+               // If insertion failed, show error message
+               JOptionPane.showMessageDialog(null, "Mượn sách thất bại! Vui lòng thử lại.", "Thông báo", JOptionPane.ERROR_MESSAGE);
+           }
+       }
     }//GEN-LAST:event_btnMuonActionPerformed
 
     private void tableTraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableTraMouseClicked
@@ -1034,11 +1138,15 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     private void btnTraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraActionPerformed
         int n = JOptionPane.showConfirmDialog(jPanel8, "Bạn muốn trả sách?", "Thông báo", JOptionPane.YES_NO_OPTION);
         if(n == JOptionPane.YES_OPTION) {
+            // Thực hiện cập nhật ngày trả sách
             if (updatePMNgayTra(labelMaPhieuMuon_Tra.getText())) {
                 JOptionPane.showMessageDialog(null, "Trả sách thành công!", "Thông báo", 1);
-                Process_Sach ps = new Process_Sach();
-                ps.updateSachTrangThai2(labelMaSach.getText());
 
+                // Cập nhật trạng thái sách thành "Còn" sau khi trả sách
+                Process_Sach ps = new Process_Sach();
+                ps.updateSachTrangThai2(labelMaSach.getText()); // Cập nhật trạng thái sách
+
+                // Làm sạch các trường thông tin
                 labelMaPhieuMuon_Tra.setText(null);
                 labelMaSach_TraSach.setText(null);
                 labelTenSach_TraSach.setText(null);
@@ -1049,10 +1157,12 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                 labelNgayTra_TraSach.setText(null);
 
                 btnTra.setEnabled(false);
+
+                // Cập nhật lại bảng sách đã mượn
+                getTableSachDaMuon();
             } else {
                 JOptionPane.showMessageDialog(null, "Trả sách thất bại!", "Thông báo", 1);
             }
-            getTableSachDaMuon();
         }
     }//GEN-LAST:event_btnTraActionPerformed
 
@@ -1069,6 +1179,10 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         btnTra.setEnabled(false);
         getTableSachDaMuon();
     }//GEN-LAST:event_btnReset_TraActionPerformed
+
+    private void btnSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearch1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSearch1ActionPerformed
 
     /**
      *
@@ -1120,6 +1234,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnReset_Tra;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnSearch1;
     private javax.swing.JButton btnTra;
     private javax.swing.JPanel homeCard;
     private javax.swing.JButton jButton1;
@@ -1136,7 +1251,11 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1154,6 +1273,8 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1166,6 +1287,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel labelDiaChi;
     private javax.swing.JLabel labelGmail;
     private javax.swing.JLabel labelHanTra_TraSach;
