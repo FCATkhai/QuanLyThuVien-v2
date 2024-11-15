@@ -542,7 +542,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
                 txtNgayTra.setText(null);
                 btnSua.setEnabled(false);
             } else {
-                JOptionPane.showMessageDialog(null, "Xóa thất bại!" , "Thông báo", 1);
+                // JOptionPane.showMessageDialog(null, "Xóa thất bại!" , "Thông báo", 1);
             }
         }
 

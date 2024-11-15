@@ -97,6 +97,7 @@ public class Process_PhieuMuon {
 
 			return true;
 		} catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, e.getMessage() , "Thông báo", 2);
 			return false;
 		}
 	}

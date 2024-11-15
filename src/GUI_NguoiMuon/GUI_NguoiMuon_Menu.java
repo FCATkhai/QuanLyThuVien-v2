@@ -636,7 +636,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         jPanel18.add(btnMuon);
 
         jToggleButton2.setText("sort");
-        jToggleButton2.setPreferredSize(new java.awt.Dimension(150, 35));
+        jToggleButton2.setPreferredSize(new java.awt.Dimension(100, 35));
         jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButton2ActionPerformed(evt);
@@ -853,34 +853,31 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel22)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel15)
-                                        .addComponent(jLabel12)
-                                        .addComponent(labelMaPhieuMuon_Tra))
-                                    .addGroup(jPanel7Layout.createSequentialGroup()
-                                        .addGap(56, 56, 56)
-                                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(jLabel16)
-                                            .addComponent(labelMaSach_TraSach))))
-                                .addGap(33, 33, 33)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel7Layout.createSequentialGroup()
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel17)
-                                    .addComponent(labelTenSach_TraSach)))
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(labelNgayMuon_TraSach)
-                                    .addGroup(jPanel7Layout.createSequentialGroup()
-                                        .addGap(56, 56, 56)
-                                        .addComponent(labelHanTra_TraSach)))
-                                .addGap(33, 33, 33)
-                                .addComponent(labelNgayTra_TraSach)))
-                        .addGap(56, 56, 56))
+                                    .addComponent(jLabel15)
+                                    .addComponent(jLabel12)
+                                    .addComponent(labelMaPhieuMuon_Tra))
+                                .addGroup(jPanel7Layout.createSequentialGroup()
+                                    .addGap(56, 56, 56)
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel16)
+                                        .addComponent(labelMaSach_TraSach))))
+                            .addGap(33, 33, 33)
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel17)
+                                .addComponent(labelTenSach_TraSach)))
+                        .addGroup(jPanel7Layout.createSequentialGroup()
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(labelNgayMuon_TraSach)
+                                .addGroup(jPanel7Layout.createSequentialGroup()
+                                    .addGap(56, 56, 56)
+                                    .addComponent(labelHanTra_TraSach)))
+                            .addGap(33, 33, 33)
+                            .addComponent(labelNgayTra_TraSach)))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(56, 56, 56)
                         .addComponent(jLabel13)
@@ -989,7 +986,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                 .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1268, Short.MAX_VALUE))
+                .addContainerGap(1286, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout returnCardLayout = new javax.swing.GroupLayout(returnCard);
@@ -1113,8 +1110,8 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
          switch (cbbDauSach.getSelectedIndex()) {
              case 0 -> sql = "SELECT * FROM tb_sach WHERE MaDauSach LIKE ?";
              case 1 -> sql = "SELECT * FROM tb_sach WHERE MaSach LIKE ?";
-             case 3 -> sql = "SELECT * FROM tb_sach WHERE TenSach LIKE ?";
-             case 4 -> sql = "SELECT * FROM tb_sach WHERE TrangThai LIKE ?";
+             case 2 -> sql = "SELECT * FROM tb_sach WHERE TenSach LIKE ?";
+             case 3 -> sql = "SELECT * FROM tb_sach WHERE TrangThai LIKE ?";
              default -> sql = null;
          }
 

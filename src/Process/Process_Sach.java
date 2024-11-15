@@ -127,7 +127,8 @@ Connect_database cd = new Connect_database();
 			return true;
 			
 		}catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Xóa thất bại!" , "Thông báo", 1);
+			JOptionPane.showMessageDialog(null, e.getMessage() , "Thông báo", 2);
+                        System.out.println(e);
 			return false;
 		}
 	}
