@@ -245,13 +245,14 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
-        btnLamMoi = new javax.swing.JButton();
         btnXoaPhieuDaTra = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablePhieuMuon = new javax.swing.JTable();
         jPanel8 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        btnLamMoi = new javax.swing.JButton();
         cbbPhieuMuon = new javax.swing.JComboBox<>();
         txtSearchPhieuMuon = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
@@ -324,7 +325,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(132, Short.MAX_VALUE)
+                .addContainerGap(176, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -337,7 +338,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel5, java.awt.BorderLayout.CENTER);
@@ -373,16 +374,6 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
             }
         });
         jPanel3.add(btnXoa);
-
-        btnLamMoi.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnLamMoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/refresh (1).png"))); // NOI18N
-        btnLamMoi.setPreferredSize(new java.awt.Dimension(40, 35));
-        btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLamMoiActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnLamMoi);
 
         btnXoaPhieuDaTra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnXoaPhieuDaTra.setText("Xoá phiếu đã trả");
@@ -424,12 +415,31 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Danh sách phiếu mượn");
-        jLabel2.setPreferredSize(new java.awt.Dimension(450, 40));
+        jLabel2.setPreferredSize(new java.awt.Dimension(300, 40));
         jPanel8.add(jLabel2);
+
+        jToggleButton1.setText("sort");
+        jToggleButton1.setPreferredSize(new java.awt.Dimension(150, 35));
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+        jPanel8.add(jToggleButton1);
+
+        btnLamMoi.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnLamMoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/refresh (1).png"))); // NOI18N
+        btnLamMoi.setPreferredSize(new java.awt.Dimension(40, 35));
+        btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLamMoiActionPerformed(evt);
+            }
+        });
+        jPanel8.add(btnLamMoi);
 
         cbbPhieuMuon.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         cbbPhieuMuon.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã phiếu mượn", "Ngày mượn", "Hạn trả", "Mã sách", "Mã người mượn", "Ngày trả" }));
-        cbbPhieuMuon.setPreferredSize(new java.awt.Dimension(150, 30));
+        cbbPhieuMuon.setPreferredSize(new java.awt.Dimension(150, 35));
         cbbPhieuMuon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbbPhieuMuonActionPerformed(evt);
@@ -438,7 +448,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
         jPanel8.add(cbbPhieuMuon);
 
         txtSearchPhieuMuon.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        txtSearchPhieuMuon.setPreferredSize(new java.awt.Dimension(250, 30));
+        txtSearchPhieuMuon.setPreferredSize(new java.awt.Dimension(250, 35));
         txtSearchPhieuMuon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSearchPhieuMuonActionPerformed(evt);
@@ -447,7 +457,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
         jPanel8.add(txtSearchPhieuMuon);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/loupe (1).png"))); // NOI18N
-        jButton2.setPreferredSize(new java.awt.Dimension(30, 30));
+        jButton2.setPreferredSize(new java.awt.Dimension(40, 35));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -462,9 +472,9 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 965, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -640,6 +650,78 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
                
     }//GEN-LAST:event_jButton2ActionPerformed
+private void sortTableData(boolean isAscending) {
+        // Lấy dữ liệu hiện tại trong bảng và lưu vào danh sách
+        DefaultTableModel model = (DefaultTableModel) tablePhieuMuon.getModel();
+        int rowCount = model.getRowCount();
+        ArrayList<Vector<Object>> data = new ArrayList<>();
+
+        // Lưu các dòng dữ liệu từ bảng vào danh sách
+        for (int i = 0; i < rowCount; i++) {
+            Vector<Object> rowData = new Vector<>();
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                rowData.add(model.getValueAt(i, j));
+            }
+            data.add(rowData);
+        }
+
+        // Lấy chỉ số cột cần sắp xếp từ combo box
+        int index = cbbPhieuMuon.getSelectedIndex();
+
+        try {
+            // Sắp xếp theo String (đối với ngày tháng dạng String)
+            data.sort((row1, row2) -> {
+                String value1 = (String) row1.get(index); // Lấy giá trị cột tại index
+                String value2 = (String) row2.get(index);
+
+                // So sánh hai giá trị String (ngày tháng)
+                if (isAscending) {
+                    return value1.compareTo(value2); // Sắp xếp tăng dần
+                } else {
+                    return value2.compareTo(value1); // Sắp xếp giảm dần
+                }
+            });
+
+        } catch (Exception e) {
+            // Nếu dữ liệu không phải String (ví dụ kiểu int), thử so sánh theo kiểu int
+            data.sort((row1, row2) -> {
+                try {
+                    // Thử lấy giá trị int từ cột
+                    int value1 = (int) row1.get(index); 
+                    int value2 = (int) row2.get(index);
+
+                    // So sánh hai giá trị int
+                    if (isAscending) {
+                        return Integer.compare(value1, value2); // Sắp xếp tăng dần
+                    } else {
+                        return Integer.compare(value2, value1); // Sắp xếp giảm dần
+                    }
+                } catch (Exception ex) {
+                    // Nếu không phải kiểu int, xử lý ngoại lệ (giả sử là kiểu String hoặc Date khác)
+                    return 0; // Nếu có lỗi thì không thực hiện sắp xếp
+                }
+            });
+        }
+
+        // Xóa tất cả dữ liệu trong bảng và thêm lại theo thứ tự đã sắp xếp
+        model.setRowCount(0); // Xóa dữ liệu hiện tại trong bảng
+        for (Vector<Object> row : data) {
+            model.addRow(row); // Thêm lại dữ liệu đã sắp xếp
+        }
+    }
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // Kiểm tra trạng thái của toggle button
+        boolean isAscending = jToggleButton1.isSelected();
+
+        if (isAscending) {
+            jToggleButton1.setText("Tăng dần");
+        } else {
+            jToggleButton1.setText("Giảm dần");
+        }
+
+        // Gọi hàm sắp xếp lại bảng dữ liệu
+        sortTableData(isAscending);
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
 
 
@@ -671,6 +753,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable tablePhieuMuon;
     private javax.swing.JTextField txtHanTra;
     private javax.swing.JTextField txtMaPhieuMuon;

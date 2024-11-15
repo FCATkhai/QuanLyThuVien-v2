@@ -67,6 +67,65 @@ public class quanLyNguoiMuonCard extends javax.swing.JPanel {
             getAllNguoiMuon();
         }
     }
+    private void sortTableData(boolean isAscending) {
+        // Lấy dữ liệu hiện tại trong bảng và lưu vào danh sách
+        DefaultTableModel model = (DefaultTableModel) tableNguoiMuon.getModel();
+        int rowCount = model.getRowCount();
+        ArrayList<Vector<Object>> data = new ArrayList<>();
+
+        // Lưu các dòng dữ liệu từ bảng vào danh sách
+        for (int i = 0; i < rowCount; i++) {
+            Vector<Object> rowData = new Vector<>();
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                rowData.add(model.getValueAt(i, j));
+            }
+            data.add(rowData);
+        }
+
+        // Lấy chỉ số cột cần sắp xếp từ combo box
+        int index = cbbNguoiMuon.getSelectedIndex();
+
+        try {
+            // Sắp xếp theo String (đối với ngày tháng dạng String)
+            data.sort((row1, row2) -> {
+                String value1 = (String) row1.get(index); // Lấy giá trị cột tại index
+                String value2 = (String) row2.get(index);
+
+                // So sánh hai giá trị String (ngày tháng)
+                if (isAscending) {
+                    return value1.compareTo(value2); // Sắp xếp tăng dần
+                } else {
+                    return value2.compareTo(value1); // Sắp xếp giảm dần
+                }
+            });
+
+        } catch (Exception e) {
+            // Nếu dữ liệu không phải String (ví dụ kiểu int), thử so sánh theo kiểu int
+            data.sort((row1, row2) -> {
+                try {
+                    // Thử lấy giá trị int từ cột
+                    int value1 = (int) row1.get(index); 
+                    int value2 = (int) row2.get(index);
+
+                    // So sánh hai giá trị int
+                    if (isAscending) {
+                        return Integer.compare(value1, value2); // Sắp xếp tăng dần
+                    } else {
+                        return Integer.compare(value2, value1); // Sắp xếp giảm dần
+                    }
+                } catch (Exception ex) {
+                    // Nếu không phải kiểu int, xử lý ngoại lệ (giả sử là kiểu String hoặc Date khác)
+                    return 0; // Nếu có lỗi thì không thực hiện sắp xếp
+                }
+            });
+        }
+
+        // Xóa tất cả dữ liệu trong bảng và thêm lại theo thứ tự đã sắp xếp
+        model.setRowCount(0); // Xóa dữ liệu hiện tại trong bảng
+        for (Vector<Object> row : data) {
+            model.addRow(row); // Thêm lại dữ liệu đã sắp xếp
+        }
+    }
     public void updateNguoiMuon(String MaNguoiMuon, String TenNguoiMuon, String DiaChi,String Gmail, String SDT) {
         Model.setRowCount(0);
         if(pmn.updateNguoiMuon(MaNguoiMuon, TenNguoiMuon, DiaChi, Gmail, SDT) == true) {
@@ -156,6 +215,7 @@ public class quanLyNguoiMuonCard extends javax.swing.JPanel {
         tableNguoiMuon = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jToggleButton1 = new javax.swing.JToggleButton();
         cbbNguoiMuon = new javax.swing.JComboBox<>();
         txtSearchNguoiMuon = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -222,12 +282,12 @@ public class quanLyNguoiMuonCard extends javax.swing.JPanel {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1071, Short.MAX_VALUE)
+            .addGap(0, 1161, Short.MAX_VALUE)
             .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 1021, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(44, Short.MAX_VALUE)))
+                    .addContainerGap(128, Short.MAX_VALUE)))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,8 +396,17 @@ public class quanLyNguoiMuonCard extends javax.swing.JPanel {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Danh sách người mượn");
-        jLabel2.setPreferredSize(new java.awt.Dimension(500, 25));
+        jLabel2.setPreferredSize(new java.awt.Dimension(400, 25));
         jPanel1.add(jLabel2);
+
+        jToggleButton1.setText("sort");
+        jToggleButton1.setPreferredSize(new java.awt.Dimension(150, 35));
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jToggleButton1);
 
         cbbNguoiMuon.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã người mượn", "Tên người mượn", "Địa chỉ", "Email", "SDT" }));
         cbbNguoiMuon.setPreferredSize(new java.awt.Dimension(150, 30));
@@ -357,7 +426,6 @@ public class quanLyNguoiMuonCard extends javax.swing.JPanel {
         jPanel1.add(txtSearchNguoiMuon);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/loupe (1).png"))); // NOI18N
-        jButton1.setLabel("");
         jButton1.setPreferredSize(new java.awt.Dimension(30, 30));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -373,7 +441,7 @@ public class quanLyNguoiMuonCard extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 965, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(45, 45, 45))
         );
@@ -536,6 +604,20 @@ public class quanLyNguoiMuonCard extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // Kiểm tra trạng thái của toggle button
+        boolean isAscending = jToggleButton1.isSelected();
+
+        if (isAscending) {
+            jToggleButton1.setText("Tăng dần");
+        } else {
+            jToggleButton1.setText("Giảm dần");
+        }
+
+        // Gọi hàm sắp xếp lại bảng dữ liệu
+        sortTableData(isAscending);
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {
         int n = JOptionPane.showConfirmDialog(jPanel4, "Bạn muốn sửa?", "Thông báo", JOptionPane.YES_NO_OPTION);
         if(n == JOptionPane.YES_OPTION) {
@@ -570,6 +652,7 @@ public class quanLyNguoiMuonCard extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable tableNguoiMuon;
     private javax.swing.JTextArea txtDiaChi;
     private javax.swing.JTextField txtGmail;

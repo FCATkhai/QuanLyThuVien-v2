@@ -143,6 +143,7 @@ public class quanLyDauSachCard extends javax.swing.JPanel {
         tableDauSach = new javax.swing.JTable();
         jPanel11 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jToggleButton1 = new javax.swing.JToggleButton();
         cbbDauSach = new javax.swing.JComboBox<>();
         txtSearchDS = new javax.swing.JTextField();
         btnSearchDauSach = new javax.swing.JButton();
@@ -161,7 +162,6 @@ public class quanLyDauSachCard extends javax.swing.JPanel {
 
         jPanel4.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setAlignmentY(0.5F);
         jPanel2.setPreferredSize(new java.awt.Dimension(823, 290));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -330,8 +330,17 @@ public class quanLyDauSachCard extends javax.swing.JPanel {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Danh sách đầu sách");
-        jLabel2.setPreferredSize(new java.awt.Dimension(500, 25));
+        jLabel2.setPreferredSize(new java.awt.Dimension(300, 25));
         jPanel11.add(jLabel2);
+
+        jToggleButton1.setText("sort");
+        jToggleButton1.setPreferredSize(new java.awt.Dimension(150, 35));
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+        jPanel11.add(jToggleButton1);
 
         cbbDauSach.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         cbbDauSach.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã đầu sách", "Tên sách", "Số lượng", "Thể loại", "Tác giả", "Nhà xuất bản", "Năm xuất bản" }));
@@ -365,8 +374,8 @@ public class quanLyDauSachCard extends javax.swing.JPanel {
                 .addGap(34, 34, 34)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 965, Short.MAX_VALUE))
-                .addContainerGap(304, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap(359, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -540,6 +549,78 @@ public class quanLyDauSachCard extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_btnSearchDauSachActionPerformed
+    private void sortTableData(boolean isAscending) {
+        // Lấy dữ liệu hiện tại trong bảng và lưu vào danh sách
+        DefaultTableModel model = (DefaultTableModel) tableDauSach.getModel();
+        int rowCount = model.getRowCount();
+        ArrayList<Vector<Object>> data = new ArrayList<>();
+
+        // Lưu các dòng dữ liệu từ bảng vào danh sách
+        for (int i = 0; i < rowCount; i++) {
+            Vector<Object> rowData = new Vector<>();
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                rowData.add(model.getValueAt(i, j));
+            }
+            data.add(rowData);
+        }
+
+        // Lấy chỉ số cột cần sắp xếp từ combo box
+        int index = cbbDauSach.getSelectedIndex();
+
+        try {
+            // Sắp xếp theo String (đối với ngày tháng dạng String)
+            data.sort((row1, row2) -> {
+                String value1 = (String) row1.get(index); // Lấy giá trị cột tại index
+                String value2 = (String) row2.get(index);
+
+                // So sánh hai giá trị String (ngày tháng)
+                if (isAscending) {
+                    return value1.compareTo(value2); // Sắp xếp tăng dần
+                } else {
+                    return value2.compareTo(value1); // Sắp xếp giảm dần
+                }
+            });
+
+        } catch (Exception e) {
+            // Nếu dữ liệu không phải String (ví dụ kiểu int), thử so sánh theo kiểu int
+            data.sort((row1, row2) -> {
+                try {
+                    // Thử lấy giá trị int từ cột
+                    int value1 = (int) row1.get(index); 
+                    int value2 = (int) row2.get(index);
+
+                    // So sánh hai giá trị int
+                    if (isAscending) {
+                        return Integer.compare(value1, value2); // Sắp xếp tăng dần
+                    } else {
+                        return Integer.compare(value2, value1); // Sắp xếp giảm dần
+                    }
+                } catch (Exception ex) {
+                    // Nếu không phải kiểu int, xử lý ngoại lệ (giả sử là kiểu String hoặc Date khác)
+                    return 0; // Nếu có lỗi thì không thực hiện sắp xếp
+                }
+            });
+        }
+
+        // Xóa tất cả dữ liệu trong bảng và thêm lại theo thứ tự đã sắp xếp
+        model.setRowCount(0); // Xóa dữ liệu hiện tại trong bảng
+        for (Vector<Object> row : data) {
+            model.addRow(row); // Thêm lại dữ liệu đã sắp xếp
+        }
+    }
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // Kiểm tra trạng thái của toggle button
+        boolean isAscending = jToggleButton1.isSelected();
+
+        if (isAscending) {
+            jToggleButton1.setText("Tăng dần");
+        } else {
+            jToggleButton1.setText("Giảm dần");
+        }
+
+        // Gọi hàm sắp xếp lại bảng dữ liệu
+        sortTableData(isAscending);
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {
         int n = JOptionPane.showConfirmDialog(jPanel4, "Bạn muốn sửa?", "Thông báo", JOptionPane.YES_NO_OPTION);
@@ -578,6 +659,7 @@ public class quanLyDauSachCard extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable tableDauSach;
     private javax.swing.JTextField txtMaDauSach;
     private javax.swing.JTextField txtNXB;

@@ -21,12 +21,17 @@ import Object.Sach;
 import Process.Connect_database;
 import Process.Process_Sach;
 import Process.Process_PhieuMuon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -278,7 +283,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         tableMuon = new javax.swing.JTable();
         jPanel18 = new javax.swing.JPanel();
         btnMuon = new javax.swing.JButton();
-        jLabel19 = new javax.swing.JLabel();
+        jToggleButton2 = new javax.swing.JToggleButton();
         btnReset = new javax.swing.JButton();
         cbbDauSach = new javax.swing.JComboBox<>();
         txtSearchS = new javax.swing.JTextField();
@@ -307,7 +312,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         jLabel25 = new javax.swing.JLabel();
         jPanel19 = new javax.swing.JPanel();
         btnTra = new javax.swing.JButton();
-        jLabel21 = new javax.swing.JLabel();
+        jToggleButton1 = new javax.swing.JToggleButton();
         btnReset_Tra = new javax.swing.JButton();
         cbbS_tra = new javax.swing.JComboBox<>();
         textSearchS2 = new javax.swing.JTextField();
@@ -630,8 +635,14 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         });
         jPanel18.add(btnMuon);
 
-        jLabel19.setPreferredSize(new java.awt.Dimension(100, 0));
-        jPanel18.add(jLabel19);
+        jToggleButton2.setText("sort");
+        jToggleButton2.setPreferredSize(new java.awt.Dimension(150, 35));
+        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton2ActionPerformed(evt);
+            }
+        });
+        jPanel18.add(jToggleButton2);
 
         btnReset.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/refresh (1).png"))); // NOI18N
@@ -918,8 +929,14 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         });
         jPanel19.add(btnTra);
 
-        jLabel21.setPreferredSize(new java.awt.Dimension(300, 0));
-        jPanel19.add(jLabel21);
+        jToggleButton1.setText("sort");
+        jToggleButton1.setPreferredSize(new java.awt.Dimension(150, 35));
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+        jPanel19.add(jToggleButton1);
 
         btnReset_Tra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnReset_Tra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/refresh (1).png"))); // NOI18N
@@ -1384,6 +1401,102 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                 }
             }          
     }//GEN-LAST:event_btnSearch1ActionPerformed
+    private void sortTableData(boolean isAscending) {
+        // Lấy dữ liệu hiện tại trong bảng và lưu vào danh sách
+        DefaultTableModel model = (DefaultTableModel) tableTra.getModel();
+        int rowCount = model.getRowCount();
+        ArrayList<Vector<Object>> data = new ArrayList<>();
+
+        // Lưu các dòng dữ liệu từ bảng vào danh sách
+        for (int i = 0; i < rowCount; i++) {
+            Vector<Object> rowData = new Vector<>();
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                rowData.add(model.getValueAt(i, j));
+            }
+            data.add(rowData);
+        }
+
+        // Sắp xếp danh sách theo cột mong muốn (ví dụ, cột "Ngày Mượn" index 3)
+        int index = cbbS_tra.getSelectedIndex();
+        data.sort((row1, row2) -> {
+            String date1 = (String) row1.get(index); // Ngày Mượn cột index 3
+            String date2 =  (String)row2.get(index);
+
+            if (isAscending) {
+                return date1.compareTo(date2); // Sắp xếp tăng dần
+            } else {
+                return date2.compareTo(date1); // Sắp xếp giảm dần
+            }
+        });
+
+        // Xóa tất cả dữ liệu trong bảng và thêm lại theo thứ tự đã sắp xếp
+        model.setRowCount(0); // Xóa dữ liệu hiện tại trong bảng
+        for (Vector<Object> row : data) {
+            model.addRow(row); // Thêm lại dữ liệu đã sắp xếp
+        }
+    }
+    private void sortTableData1(boolean isAscending) {
+        // Lấy dữ liệu hiện tại trong bảng và lưu vào danh sách
+        DefaultTableModel model = (DefaultTableModel) tableMuon.getModel();
+        int rowCount = model.getRowCount();
+        ArrayList<Vector<Object>> data = new ArrayList<>();
+
+        // Lưu các dòng dữ liệu từ bảng vào danh sách
+        for (int i = 0; i < rowCount; i++) {
+            Vector<Object> rowData = new Vector<>();
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                rowData.add(model.getValueAt(i, j));
+            }
+            data.add(rowData);
+        }
+
+        // Sắp xếp danh sách theo cột mong muốn (ví dụ, cột "Ngày Mượn" index 3)
+        int index = cbbDauSach.getSelectedIndex();
+        data.sort((row1, row2) -> {
+            String date1 = (String) row1.get(index); // Ngày Mượn cột index 3
+            String date2 =  (String)row2.get(index);
+
+            if (isAscending) {
+                return date1.compareTo(date2); // Sắp xếp tăng dần
+            } else {
+                return date2.compareTo(date1); // Sắp xếp giảm dần
+            }
+        });
+
+        // Xóa tất cả dữ liệu trong bảng và thêm lại theo thứ tự đã sắp xếp
+        model.setRowCount(0); // Xóa dữ liệu hiện tại trong bảng
+        for (Vector<Object> row : data) {
+            model.addRow(row); // Thêm lại dữ liệu đã sắp xếp
+        }
+    }
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // Kiểm tra trạng thái của toggle button
+        boolean isAscending = jToggleButton1.isSelected();
+
+        if (isAscending) {
+            jToggleButton1.setText("Tăng dần");
+        } else {
+            jToggleButton1.setText("Giảm dần");
+        }
+
+        // Gọi hàm sắp xếp lại bảng dữ liệu
+        sortTableData(isAscending);
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
+        // TODO add your handling code here:
+                // Kiểm tra trạng thái của toggle button
+        boolean isAscending = jToggleButton2.isSelected();
+
+        if (isAscending) {
+            jToggleButton2.setText("Tăng dần");
+        } else {
+            jToggleButton2.setText("Giảm dần");
+        }
+
+        // Gọi hàm sắp xếp lại bảng dữ liệu
+        sortTableData1(isAscending);
+    }//GEN-LAST:event_jToggleButton2ActionPerformed
 
     /**
      *
@@ -1454,10 +1567,8 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
@@ -1489,6 +1600,8 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JLabel labelDiaChi;
     private javax.swing.JLabel labelGmail;
     private javax.swing.JLabel labelHanTra_TraSach;
