@@ -96,7 +96,7 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
         UserAccountInput = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        UserPasswordInput = new javax.swing.JTextField();
+        UserPasswordInput = new javax.swing.JPasswordField();
         jPanel7 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jToggleButton1 = new javax.swing.JToggleButton();
@@ -198,22 +198,7 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         jPanel6.add(jLabel1, gridBagConstraints);
 
-        UserPasswordInput.setForeground(new java.awt.Color(204, 204, 204));
-        UserPasswordInput.setText("Nhập mật khẩu...");
         UserPasswordInput.setPreferredSize(new java.awt.Dimension(250, 30));
-        UserPasswordInput.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                UserPasswordInputFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                UserPasswordInputFocusLost(evt);
-            }
-        });
-        UserPasswordInput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UserPasswordInputActionPerformed(evt);
-            }
-        });
         jPanel6.add(UserPasswordInput, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -291,10 +276,16 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
                         userMenu.setVisible(true);
                         this.setVisible(false);
                     } else {
-                        System.out.println("User login failed. Incorrect Email or Password.");
+                        JOptionPane.showMessageDialog(null, 
+                        "login failed. Incorrect Username or Password.", 
+                        "Login Failed", 
+                        JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    System.out.println("No account found for the given email.");
+                        JOptionPane.showMessageDialog(null, 
+                        "login failed. Incorrect Username or Password.", 
+                        "Login Failed", 
+                        JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 // Nếu input không chứa @, có thể là người dùng hoặc admin đăng nhập bằng username
@@ -319,7 +310,10 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
                         mainPage.setVisible(true);
                         this.setVisible(false);
                     } else {
-                        System.out.println("Admin login failed. Incorrect Username or Password.");
+                        JOptionPane.showMessageDialog(null, 
+                        "login failed. Incorrect Username or Password.", 
+                        "Login Failed", 
+                        JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
                     // Not found in admin table, check for regular user in the users table
@@ -342,7 +336,10 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
                             System.out.println("User login failed. Incorrect Username or Password.");
                         }
                     } else {
-                        System.out.println("No account found for the given username.");
+                         JOptionPane.showMessageDialog(null, 
+                        "login failed. Incorrect Username or Password.", 
+                        "Login Failed", 
+                        JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -357,10 +354,6 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
-    private void UserPasswordInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserPasswordInputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_UserPasswordInputActionPerformed
-
     private void UserAccountInputFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UserAccountInputFocusGained
         if(UserAccountInput.getText().equals("Nhập tài khoản...")){
             UserAccountInput.setText("");
@@ -368,26 +361,12 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_UserAccountInputFocusGained
 
-    private void UserPasswordInputFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UserPasswordInputFocusGained
-        if(UserPasswordInput.getText().equals("Nhập mật khẩu...")){
-            UserPasswordInput.setText("");
-            UserPasswordInput.setForeground(new Color(0,0,0));
-        }
-    }//GEN-LAST:event_UserPasswordInputFocusGained
-
     private void UserAccountInputFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UserAccountInputFocusLost
         if(UserAccountInput.getText().equals("")){
             UserAccountInput.setText("Nhập tài khoản...");
             UserAccountInput.setForeground(new Color(204,204,204));
         }
     }//GEN-LAST:event_UserAccountInputFocusLost
-
-    private void UserPasswordInputFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UserPasswordInputFocusLost
-        if(UserPasswordInput.getText().equals("")){
-            UserPasswordInput.setText("Nhập mật khẩu...");
-            UserPasswordInput.setForeground(new Color(204,204,204));
-        }
-    }//GEN-LAST:event_UserPasswordInputFocusLost
 
     /**
      * @param args the command line arguments
@@ -426,7 +405,7 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField UserAccountInput;
-    private javax.swing.JTextField UserPasswordInput;
+    private javax.swing.JPasswordField UserPasswordInput;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
