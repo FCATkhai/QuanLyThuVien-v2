@@ -7,17 +7,12 @@ package GUI_ThuThu;
 import Process.Process_PhieuMuon;
 import Process.Process_Sach;
 
-import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import Object.PhieuMuon;
-import Process.Connect_database;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  *
@@ -532,7 +527,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
             if (delPhieuMuon(txtMaPhieuMuon.getText())) {
                 JOptionPane.showMessageDialog(null, "Xóa thành công!" , "Thông báo", 1);
                 Process_Sach ps = new Process_Sach();
-                ps.updateSachTrangThai2((String)cbbMaSach.getSelectedItem());
+                ps.updateSachTrangThai_Con((String)cbbMaSach.getSelectedItem());
                 txtMaPhieuMuon.setEnabled(true);
                 txtMaPhieuMuon.setText(null);
                 txtHanTra.setText(null);
@@ -569,7 +564,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
                else {
                    if (updatePMNgayTra(Date.valueOf(txtNgayTra.getText()), txtMaPhieuMuon.getText())) {
                        Process_Sach ps = new Process_Sach();
-                       ps.updateSachTrangThai2((String) cbbMaSach.getSelectedItem());
+                       ps.updateSachTrangThai_Con((String) cbbMaSach.getSelectedItem());
                        JOptionPane.showMessageDialog(null, "Cập nhật ngày trả và trạng thái sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                    } else {
                        JOptionPane.showMessageDialog(null, "Cập nhật ngày trả thất bại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
@@ -607,7 +602,7 @@ public class quanLyPhieuMuon extends javax.swing.JPanel {
 
                       // Cập nhật trạng thái sách
                       Process_Sach ps = new Process_Sach();
-                      ps.updateSachTrangThai(maSach);
+                      ps.updateSachTrangThai_DaMuon(maSach);
 
                       // Xóa dữ liệu giao diện
                       clearInputFields();
