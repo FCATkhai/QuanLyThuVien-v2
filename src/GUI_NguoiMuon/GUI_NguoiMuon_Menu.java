@@ -6,6 +6,7 @@ package GUI_NguoiMuon;
 
 import GUI_ThuThu.*;
 import Main.GUI_ChooseLogin;
+import Object.DauSach;
 import java.awt.CardLayout;
 import java.sql.*;
 import java.util.ArrayList;
@@ -174,18 +175,8 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         tableMuon.setModel(Model1);
     }
 
-    // Method to insert a loan record (PhieuMuon)
     
 
-    public boolean updatePMNgayTra(String MaPhieuMuon) {
-        if(ppm.updatePhieuMuonNgayTra(null, MaPhieuMuon)) {
-            return true;
-        }
-        else {
-            return false;
-        }
-
-    }
     // Tra sach card
     public void getTableSachDaMuon() {
         Model2.setRowCount(0);
@@ -212,16 +203,16 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         this.MaNguoiMuon = MaNguoiMuon;
         getTTNguoiMuon(MaNguoiMuon);
         getSLSach();
-        getSLSachDaMuon(MaNguoiMuon);
+        
         btnMuon.setEnabled(false);
         columnsMuon.add("Mã Sách");
         columnsMuon.add("Tên sách");
         columnsMuon.add("Trạng thái");
         columnsMuon.add("Mã đầu sách");
         getTableMuon();
+        columnsTra.add("Mã Phiếu mượn");
         columnsTra.add("Mã Sách");
-        columnsTra.add("Tên sách");
-        columnsTra.add("Mã đầu sách");
+        columnsTra.add("Tên Sách");
         columnsTra.add("Ngày mượn");
         columnsTra.add("Hạn trả");
         columnsTra.add("Ngày trả");
@@ -288,8 +279,9 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         btnMuon = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         btnReset = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        btnSearch = new javax.swing.JButton();
+        cbbDauSach = new javax.swing.JComboBox<>();
+        txtSearchS = new javax.swing.JTextField();
+        btnSearchS = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         returnCard = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -388,6 +380,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
 
         jPanel15.add(jPanel17);
 
+        jPanel16.setBackground(new java.awt.Color(66, 61, 61));
         jPanel16.setLayout(new java.awt.GridBagLayout());
 
         jButton5.setBackground(new java.awt.Color(102, 102, 102));
@@ -635,7 +628,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         });
         jPanel18.add(btnMuon);
 
-        jLabel19.setPreferredSize(new java.awt.Dimension(250, 0));
+        jLabel19.setPreferredSize(new java.awt.Dimension(100, 0));
         jPanel18.add(jLabel19);
 
         btnReset.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -648,20 +641,24 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         });
         jPanel18.add(btnReset);
 
-        jTextField1.setPreferredSize(new java.awt.Dimension(250, 30));
-        jPanel18.add(jTextField1);
+        cbbDauSach.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã Đầu sách", "Mã Sách", "Tên Sách", "Trạng thái", " " }));
+        cbbDauSach.setPreferredSize(new java.awt.Dimension(150, 30));
+        jPanel18.add(cbbDauSach);
 
-        btnSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/loupe (1).png"))); // NOI18N
-        btnSearch.setText("Tìm");
-        btnSearch.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        btnSearch.setPreferredSize(new java.awt.Dimension(100, 30));
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+        txtSearchS.setPreferredSize(new java.awt.Dimension(250, 30));
+        jPanel18.add(txtSearchS);
+
+        btnSearchS.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnSearchS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/loupe (1).png"))); // NOI18N
+        btnSearchS.setText("Tìm");
+        btnSearchS.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        btnSearchS.setPreferredSize(new java.awt.Dimension(100, 30));
+        btnSearchS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
+                btnSearchSActionPerformed(evt);
             }
         });
-        jPanel18.add(btnSearch);
+        jPanel18.add(btnSearchS);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -969,7 +966,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                 .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1295, Short.MAX_VALUE))
+                .addContainerGap(1268, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout returnCardLayout = new javax.swing.GroupLayout(returnCard);
@@ -1026,6 +1023,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         UICards.removeAll();
+        getSLSachDaMuon(MaNguoiMuon);
         UICards.add(homeCard);
         UICards.revalidate();
         UICards.repaint();    
@@ -1055,23 +1053,97 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void tableMuonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMuonMouseClicked
+           int index = tableMuon.getSelectedRow();  // Lấy chỉ số của hàng được chọn
+          if (index >= 0) {  // Kiểm tra nếu chỉ số hợp lệ (không phải -1 khi không chọn hàng)
+              labelMaSach.setText((String)(Model1.getValueAt(index, 0)));
+              labelTenSach.setText((String)(Model1.getValueAt(index, 1)));
+              labelTrangThai.setText((String)(Model1.getValueAt(index, 2)));
 
-        int index = tableMuon.getSelectedRow();
-        labelMaSach.setText((String)(Model1.getValueAt(index, 0)));
-        labelTenSach.setText((String)(Model1.getValueAt(index, 1)));
-        labelTrangThai.setText((String)(Model1.getValueAt(index, 2)));
-
-        if (labelTrangThai.getText().equals("Còn")) {
-            btnMuon.setEnabled(true);
-        } else {
-            btnMuon.setEnabled(false);
-        }
-
+              // Kiểm tra trạng thái của sách và quyết định bật hay tắt nút Mượn
+              if ("Còn".equals(labelTrangThai.getText().trim())) {
+                  btnMuon.setEnabled(true);
+              } else {
+                  btnMuon.setEnabled(false);
+              }
+          }  
     }//GEN-LAST:event_tableMuonMouseClicked
 
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSearchActionPerformed
+    private void btnSearchSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchSActionPerformed
+         String searchText = txtSearchS.getText().trim();  // Lấy nội dung ô tìm kiếm và loại bỏ khoảng trắng thừa
+         if (searchText.isEmpty()) {
+             JOptionPane.showMessageDialog(null, "Bạn chưa nhập đủ thông tin!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+             return;
+         }
+
+         // Khởi tạo Model1 và các cột của bảng
+         
+         Vector<String> columns1 = new Vector<>();
+         columns1.add("Mã Sách");
+         columns1.add("Tên Sách");
+         columns1.add("Trạng thái");
+         columns1.add("Mã Đầu Sách");
+
+         Vector<Vector<Object>> rows1 = new Vector<>();
+         String sql = null;
+
+         // Tạo câu lệnh SQL dựa vào lựa chọn trong combo box
+         switch (cbbDauSach.getSelectedIndex()) {
+             case 0 -> sql = "SELECT * FROM tb_sach WHERE MaDauSach LIKE ?";
+             case 1 -> sql = "SELECT * FROM tb_sach WHERE MaSach LIKE ?";
+             case 3 -> sql = "SELECT * FROM tb_sach WHERE TenSach LIKE ?";
+             case 4 -> sql = "SELECT * FROM tb_sach WHERE TrangThai LIKE ?";
+             default -> sql = null;
+         }
+
+         // Nếu có câu lệnh SQL hợp lệ
+         if (sql != null) {
+             // Kết nối đến cơ sở dữ liệu
+             Connection cn = cd.getConnection();
+             ArrayList<Sach> ls = new ArrayList<>();
+
+             try {
+                 PreparedStatement ps = cn.prepareStatement(sql);
+                 ps.setString(1, "%" + searchText + "%");
+                 ResultSet rs = ps.executeQuery();
+
+                 // Xử lý kết quả truy vấn
+                 while (rs.next()) {
+                     Sach st = new Sach();
+                     st.setMaDauSach(rs.getString("MaDauSach"));
+                     st.setMaSach(rs.getString("MaSach"));
+                     st.setTenSach(rs.getString("TenSach"));
+                     st.setTrangThai(rs.getString("TrangThai"));
+                     ls.add(st);
+                 }
+
+                 // Thêm dữ liệu vào Model1
+                 for (Sach s : ls) {
+                     Vector<Object> tbRow1 = new Vector<>();
+                     tbRow1.add(s.getMaSach());
+                     tbRow1.add(s.getTenSach());
+                     tbRow1.add(s.getTrangThai());
+                     tbRow1.add(s.getMaDauSach());
+                     rows1.add(tbRow1);
+                 }
+
+                 // Cập nhật dữ liệu vào Model1 và bảng
+                 Model1.setDataVector(rows1, columns1);
+                 tableMuon.setModel(Model1);
+
+                 // Dọn dẹp sau khi tìm kiếm
+                 cbbDauSach.setSelectedIndex(-1);
+                 txtSearchS.setText("");
+
+                 // Nếu không có kết quả tìm kiếm
+                 if (Model1.getRowCount() == 0) {
+                     JOptionPane.showMessageDialog(null, "Không tìm thấy!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                 }
+
+             } catch (SQLException e1) {
+                 System.out.println("Lỗi tìm kiếm: " + e1.getMessage());
+             }
+         }  
+    }//GEN-LAST:event_btnSearchSActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         labelMaSach.setText(null);
@@ -1119,19 +1191,26 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMuonActionPerformed
 
     private void tableTraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableTraMouseClicked
-        int index = tableTra.getSelectedRow();
-        labelMaPhieuMuon_Tra.setText((String)(Model2.getValueAt(index, 0)));
-        labelMaSach_TraSach.setText((String)(Model2.getValueAt(index, 1)));
-        labelTenSach_TraSach.setText((String)(Model2.getValueAt(index, 2)));
-        labelNgayMuon_TraSach.setText((String)(Model2.getValueAt(index, 3)));
-        labelHanTra_TraSach.setText((String)(Model2.getValueAt(index, 4)));
-        labelNgayTra_TraSach.setText((String)(Model2.getValueAt(index, 5)));
-        labelTrangThai_TraSach.setText((String)(Model2.getValueAt(index, 6)));
+    int index = tableTra.getSelectedRow();  // Lấy chỉ số dòng được chọn
+        if (index != -1) {  // Kiểm tra xem có dòng nào được chọn không
+            // Lấy và hiển thị thông tin từ bảng vào các label
+            labelMaPhieuMuon_Tra.setText((String)(Model2.getValueAt(index, 0)));
+            labelMaSach_TraSach.setText((String)(Model2.getValueAt(index, 1)));
+            labelTenSach_TraSach.setText((String)(Model2.getValueAt(index, 2)));
+            labelNgayMuon_TraSach.setText((String)(Model2.getValueAt(index, 3)));
+            labelHanTra_TraSach.setText((String)(Model2.getValueAt(index, 4)));
+            labelNgayTra_TraSach.setText((String)(Model2.getValueAt(index, 5)));
+            labelTrangThai_TraSach.setText((String)(Model2.getValueAt(index, 6)));
 
-        if (labelTrangThai_TraSach.getText().equals("Chưa trả")) {
-            btnTra.setEnabled(true);
-        } else {
-            btnTra.setEnabled(false);
+            // Kiểm tra trạng thái sách và cập nhật nút "Trả sách"
+            System.out.println(labelMaSach_TraSach.getText());
+            String trangThai = labelTrangThai_TraSach.getText();
+            System.out.println(labelTrangThai_TraSach.getText());
+            if ("Chưa trả".equals(trangThai)) {
+                btnTra.setEnabled(true);  // Nếu sách chưa trả, kích hoạt nút "Trả sách"
+            } else {
+                btnTra.setEnabled(false);  // Nếu sách đã trả, vô hiệu hóa nút "Trả sách"
+            }
         }
     }//GEN-LAST:event_tableTraMouseClicked
 
@@ -1139,14 +1218,19 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         int n = JOptionPane.showConfirmDialog(jPanel8, "Bạn muốn trả sách?", "Thông báo", JOptionPane.YES_NO_OPTION);
         if(n == JOptionPane.YES_OPTION) {
             // Thực hiện cập nhật ngày trả sách
-            if (updatePMNgayTra(labelMaPhieuMuon_Tra.getText())) {
+            if (ppm.updatePhieuMuonNgayTraUser(labelMaPhieuMuon_Tra.getText())) {
                 JOptionPane.showMessageDialog(null, "Trả sách thành công!", "Thông báo", 1);
 
                 // Cập nhật trạng thái sách thành "Còn" sau khi trả sách
                 Process_Sach ps = new Process_Sach();
-                ps.updateSachTrangThai2(labelMaSach.getText()); // Cập nhật trạng thái sách
-
-                // Làm sạch các trường thông tin
+                System.out.println(labelMaSach_TraSach.getText());
+                if (ps.updateSachTrangThai2(labelMaSach_TraSach.getText())) {
+                    System.out.println("Trạng thái sách đã được cập nhật thành 'Còn'.");
+                } else {
+                    System.out.println("Cập nhật trạng thái sách thất bại.");
+                }
+                
+                // Làm sạch các trường thông tin trên giao diện
                 labelMaPhieuMuon_Tra.setText(null);
                 labelMaSach_TraSach.setText(null);
                 labelTenSach_TraSach.setText(null);
@@ -1155,9 +1239,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                 labelHanTra_TraSach.setText(null);
                 labelNgayTra_TraSach.setText(null);
                 labelNgayTra_TraSach.setText(null);
-
-                btnTra.setEnabled(false);
-
+                
                 // Cập nhật lại bảng sách đã mượn
                 getTableSachDaMuon();
             } else {
@@ -1233,9 +1315,10 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnMuon;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnReset_Tra;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSearch1;
+    private javax.swing.JButton btnSearchS;
     private javax.swing.JButton btnTra;
+    private javax.swing.JComboBox<String> cbbDauSach;
     private javax.swing.JPanel homeCard;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -1286,7 +1369,6 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel labelDiaChi;
     private javax.swing.JLabel labelGmail;
@@ -1309,5 +1391,6 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
     private javax.swing.JPanel returnCard;
     private javax.swing.JTable tableMuon;
     private javax.swing.JTable tableTra;
+    private javax.swing.JTextField txtSearchS;
     // End of variables declaration//GEN-END:variables
 }
