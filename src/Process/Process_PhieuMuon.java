@@ -88,7 +88,7 @@ public class Process_PhieuMuon {
 			}
 		}
 	}
-	
+        
 	public boolean updatePhieuMuon(String MaPhieuMuon, Date NgayMuon, Date HanTra, String MaSach, String MaNguoiMuon) {
 		Connection cn = cd.getConnection();
 		String sql = "UPDATE `tb_phieumuon` SET NgayMuon = ?, HanTra = ? , MaSach = ? , MaNguoiMuon = ? where MaPhieuMuon = ?";
