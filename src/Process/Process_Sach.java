@@ -77,7 +77,7 @@ Connect_database cd = new Connect_database();
 	
 	
 	
-	public boolean updateSachTrangThai(String MaSach) {
+	public boolean updateSachTrangThai_DaMuon(String MaSach) {
 		Connection cn = cd.getConnection();
 		String sql = "UPDATE `tb_sach` SET `TrangThai` = 'Đã mượn' WHERE (`MaSach` = ?);";
 		try {
@@ -92,7 +92,7 @@ Connect_database cd = new Connect_database();
 		}
 	}
 	
-        public boolean updateSachTrangThai2(String MaSach) {
+        public boolean updateSachTrangThai_Con(String MaSach) {
             Connection cn = null;
             PreparedStatement ps = null;
             try {

@@ -65,16 +65,13 @@ public class Process_PhieuMuon {
 			System.out.println("transaction thành công");
 			return true;
 		}catch (SQLException e) {
-			if (cn != null) {
-				try {
-					cn.rollback();
-					System.out.println("Transaction bị rollback do lỗi: " + e.getMessage());
-				}
-				catch (SQLException rollbackEx) {
-					rollbackEx.printStackTrace();
-				}
-			}
-			return false;
+            try {
+                cn.rollback();
+                System.out.println("Transaction bị rollback do lỗi: " + e.getMessage());
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            return false;
 		}
 		finally {
 			// Đóng kết nối

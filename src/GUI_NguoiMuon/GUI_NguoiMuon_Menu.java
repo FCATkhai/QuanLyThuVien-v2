@@ -4,13 +4,11 @@
  */
 package GUI_NguoiMuon;
 
-import GUI_ThuThu.*;
 import Main.GUI_ChooseLogin;
 import java.awt.CardLayout;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Vector;
 
 import Process.Process_NguoiMuon;
@@ -19,9 +17,6 @@ import Object.Sach;
 import Process.Connect_database;
 import Process.Process_Sach;
 import Process.Process_PhieuMuon;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -111,49 +106,15 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         }    
     }
     public boolean insertPhieuMuon(String MaSach, String MaNguoiMuon) {
-        Connection cn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        String MaPhieuMuon = null;
-        try {
-            cn = cd.getConnection();
-            String sqlMax = "SELECT MAX(MaPhieuMuon) AS lastPhieuMuon FROM tb_phieumuon";
-            ps = cn.prepareStatement(sqlMax);
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                String lastPhieuMuon = rs.getString("lastPhieuMuon");
-                if (lastPhieuMuon == null || lastPhieuMuon.isEmpty()) {
-                    MaPhieuMuon = "P001";
-                } else {
-                    String numericPart = lastPhieuMuon.substring(1);
-                    int nextNumber = Integer.parseInt(numericPart) + 1;
-                    MaPhieuMuon = "P" + String.format("%03d", nextNumber);
-                }
-            }
-
-            String sqlInsert = "INSERT INTO tb_phieumuon (MaPhieuMuon, NgayMuon, HanTra, MaSach, MaNguoiMuon) "
-                             + "VALUES (?, NOW(), DATE_ADD(NOW(), INTERVAL 7 DAY), ?, ?)";
-            ps = cn.prepareStatement(sqlInsert);
-            ps.setString(1, MaPhieuMuon);
-            ps.setString(2, MaSach);
-            ps.setString(3, MaNguoiMuon);
-            ps.executeUpdate();
-
-            
-
+        Model1.setRowCount(0);
+        if(ppm.insertPhieuMuon(null, null, null, MaSach, MaNguoiMuon)) {
+            // Update the book status after successful loan
+            Process_Sach ps = new Process_Sach();
+            ps.updateSachTrangThai_DaMuon(MaSach);
             return true;
-        } catch (SQLException e) {
-            System.out.println("Error while inserting PhieuMuon: " + e.getMessage());
+        }
+        else {
             return false;
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (cn != null) cn.close();
-            } catch (SQLException e) {
-                System.out.println("Error closing resources: " + e.getMessage());
-            }
         }
     }
 
@@ -179,6 +140,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
 
     public boolean updatePMNgayTra(String MaPhieuMuon) {
         if(ppm.updatePhieuMuonNgayTra(null, MaPhieuMuon)) {
+            ps.updateSachTrangThai_Con(MaPhieuMuon);
             return true;
         }
         else {
@@ -219,9 +181,9 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         columnsMuon.add("Trạng thái");
         columnsMuon.add("Mã đầu sách");
         getTableMuon();
-        columnsTra.add("Mã Sách");
+        columnsTra.add("Mã phiếu mượn");
+        columnsTra.add("Mã sách");
         columnsTra.add("Tên sách");
-        columnsTra.add("Mã đầu sách");
         columnsTra.add("Ngày mượn");
         columnsTra.add("Hạn trả");
         columnsTra.add("Ngày trả");
@@ -843,34 +805,31 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel22)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel15)
-                                        .addComponent(jLabel12)
-                                        .addComponent(labelMaPhieuMuon_Tra))
-                                    .addGroup(jPanel7Layout.createSequentialGroup()
-                                        .addGap(56, 56, 56)
-                                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(jLabel16)
-                                            .addComponent(labelMaSach_TraSach))))
-                                .addGap(33, 33, 33)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel7Layout.createSequentialGroup()
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel17)
-                                    .addComponent(labelTenSach_TraSach)))
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(labelNgayMuon_TraSach)
-                                    .addGroup(jPanel7Layout.createSequentialGroup()
-                                        .addGap(56, 56, 56)
-                                        .addComponent(labelHanTra_TraSach)))
-                                .addGap(33, 33, 33)
-                                .addComponent(labelNgayTra_TraSach)))
-                        .addGap(56, 56, 56))
+                                    .addComponent(jLabel15)
+                                    .addComponent(jLabel12)
+                                    .addComponent(labelMaPhieuMuon_Tra))
+                                .addGroup(jPanel7Layout.createSequentialGroup()
+                                    .addGap(56, 56, 56)
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel16)
+                                        .addComponent(labelMaSach_TraSach))))
+                            .addGap(33, 33, 33)
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel17)
+                                .addComponent(labelTenSach_TraSach)))
+                        .addGroup(jPanel7Layout.createSequentialGroup()
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(labelNgayMuon_TraSach)
+                                .addGroup(jPanel7Layout.createSequentialGroup()
+                                    .addGap(56, 56, 56)
+                                    .addComponent(labelHanTra_TraSach)))
+                            .addGap(33, 33, 33)
+                            .addComponent(labelNgayTra_TraSach)))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(56, 56, 56)
                         .addComponent(jLabel13)
@@ -969,7 +928,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                 .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1295, Short.MAX_VALUE))
+                .addContainerGap(1286, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout returnCardLayout = new javax.swing.GroupLayout(returnCard);
@@ -1096,9 +1055,6 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
 
            // Attempt to insert the loan record
            if (insertPhieuMuon(maSach, maNguoiMuon)) {
-               // Update the book status after successful loan
-               Process_Sach ps = new Process_Sach();
-               ps.updateSachTrangThai(maSach);
 
                // Clear the labels for the next operation
                labelMaSach.setText(null);
@@ -1144,7 +1100,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
 
                 // Cập nhật trạng thái sách thành "Còn" sau khi trả sách
                 Process_Sach ps = new Process_Sach();
-                ps.updateSachTrangThai2(labelMaSach.getText()); // Cập nhật trạng thái sách
+                ps.updateSachTrangThai_Con(labelMaSach.getText()); // Cập nhật trạng thái sách
 
                 // Làm sạch các trường thông tin
                 labelMaPhieuMuon_Tra.setText(null);
