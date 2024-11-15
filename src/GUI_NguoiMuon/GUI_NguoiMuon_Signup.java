@@ -233,7 +233,7 @@ public class GUI_NguoiMuon_Signup extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 219, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Đăng ký đọc giả mới");
+        jLabel1.setText("Đăng ký độc giả mới");
         jLabel1.setPreferredSize(new java.awt.Dimension(500, 70));
         jPanel6.add(jLabel1);
 
@@ -326,8 +326,9 @@ public class GUI_NguoiMuon_Signup extends javax.swing.JFrame {
         if(!sb.isEmpty()) {
                 JOptionPane.showMessageDialog(this, sb.toString());
         }
-        if(signup_connection(TenNguoiMuon, password, DiaChi, Gmail, SDT)) {
-                JOptionPane.showMessageDialog(this, "Đăng ký thành công");
+        String newMaNguoiMuon = signup_connection(TenNguoiMuon, password, DiaChi, Gmail, SDT);
+        if(newMaNguoiMuon != null) {
+                JOptionPane.showMessageDialog(this, "Đăng ký thành công\n Tên đăng nhập của bạn là "+newMaNguoiMuon);
                 GUI_ChooseLogin gui_NguoiMuon_Login = new GUI_ChooseLogin();
                 gui_NguoiMuon_Login.setLocationRelativeTo(null);  // Giua man hinh
                 gui_NguoiMuon_Login.setVisible(true);
@@ -338,7 +339,7 @@ public class GUI_NguoiMuon_Signup extends javax.swing.JFrame {
         }
     }
 
-    private boolean signup_connection(String TenNguoiMuon, String password, String DiaChi, String Gmail, String SDT) {
+    private String signup_connection(String TenNguoiMuon, String password, String DiaChi, String Gmail, String SDT) {
         Connection cn = Connect_database.getConnection();
         String sql_get_last_id = "SELECT MaNguoiMuon FROM tb_nguoimuon ORDER BY MaNguoiMuon DESC LIMIT 1";
         String sql_signup = "INSERT INTO tb_nguoimuon (MaNguoiMuon, TenNguoiMuon, DiaChi, Gmail, SDT) VALUES (?, ?, ?, ?, ?)";
@@ -371,10 +372,10 @@ public class GUI_NguoiMuon_Signup extends javax.swing.JFrame {
             ps2.executeUpdate();
 
             cn.close();
-            return true;
+            return newMaNguoiMuon;
         } catch (Exception e) {
             System.out.println(e);
-            return false;
+            return null;
         }    
     }
 
