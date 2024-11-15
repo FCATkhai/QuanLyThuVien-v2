@@ -459,86 +459,86 @@ public class quanLyDauSachCard extends javax.swing.JPanel {
     private void btnSearchDauSachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDauSachActionPerformed
         // TODO add your handling code here:
         Connect_database cd = new Connect_database();
-    DefaultTableModel Model1 = new DefaultTableModel();
-    
-    // Khởi tạo tên cột
-    Vector<String> columns1 = new Vector<>();
-    columns1.add("Mã Đầu Sách");
-    columns1.add("Tên Sách");
-    columns1.add("Số Lượng");
-    columns1.add("Thể Loại");
-    columns1.add("Tác Giả");
-    columns1.add("NXB");
-    columns1.add("Năm XB");
-    
-    Vector<Vector<Object>> rows1 = new Vector<>();
-    String sql = null;
+        DefaultTableModel Model1 = new DefaultTableModel();
 
-    if (txtSearchDS.getText().equals("")) {
-        JOptionPane.showMessageDialog(null, "Bạn chưa nhập đủ thông tin!", "Thông báo", 1);
-    } else {
-        switch (cbbDauSach.getSelectedIndex()) {
-            case 0 -> sql = "SELECT * FROM tb_dausach WHERE MaDauSach = ?";
-            case 1 -> sql = "SELECT * FROM tb_dausach WHERE TenSach LIKE ?";
-            case 2 -> sql = "SELECT * FROM tb_dausach WHERE SoLuong = ?";
-            case 3 -> sql = "SELECT * FROM tb_dausach WHERE TheLoai LIKE ?";
-            case 4 -> sql = "SELECT * FROM tb_dausach WHERE TacGia LIKE ?";
-            case 5 -> sql = "SELECT * FROM tb_dausach WHERE NXB = ?";
-            case 6 -> sql = "SELECT * FROM tb_dausach WHERE NamXB = ?";
-        }
-        
-        Model1.setRowCount(0);
-        Connection cn = cd.getConnection();
-        ArrayList<DauSach> ls = new ArrayList<>();
-        
-        try {
-            PreparedStatement ps = cn.prepareStatement(sql);
-            if (sql.contains("LIKE")) {
-                ps.setString(1, "%" + txtSearchDS.getText() + "%");
-            } else {
-                ps.setString(1, txtSearchDS.getText());
+        // Khởi tạo tên cột
+        Vector<String> columns1 = new Vector<>();
+        columns1.add("Mã Đầu Sách");
+        columns1.add("Tên Sách");
+        columns1.add("Số Lượng");
+        columns1.add("Thể Loại");
+        columns1.add("Tác Giả");
+        columns1.add("NXB");
+        columns1.add("Năm XB");
+
+        Vector<Vector<Object>> rows1 = new Vector<>();
+        String sql = null;
+
+        if (txtSearchDS.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Bạn chưa nhập đủ thông tin!", "Thông báo", 1);
+        } else {
+            switch (cbbDauSach.getSelectedIndex()) {
+                case 0 -> sql = "SELECT * FROM tb_dausach WHERE MaDauSach = ?";
+                case 1 -> sql = "SELECT * FROM tb_dausach WHERE TenSach LIKE ?";
+                case 2 -> sql = "SELECT * FROM tb_dausach WHERE SoLuong = ?";
+                case 3 -> sql = "SELECT * FROM tb_dausach WHERE TheLoai LIKE ?";
+                case 4 -> sql = "SELECT * FROM tb_dausach WHERE TacGia LIKE ?";
+                case 5 -> sql = "SELECT * FROM tb_dausach WHERE NXB = ?";
+                case 6 -> sql = "SELECT * FROM tb_dausach WHERE NamXB = ?";
             }
-            ResultSet rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                DauSach st = new DauSach();
-                st.setMaDauSach(rs.getString("MaDauSach"));
-                st.setTenSach(rs.getString("TenSach"));
-                st.setSoLuong(rs.getInt("SoLuong"));
-                st.setTheLoai(rs.getString("TheLoai"));
-                st.setTacGia(rs.getString("TacGia"));
-                st.setNXB(rs.getString("NXB"));
-                st.setNamXB(rs.getInt("NamXB"));
-                ls.add(st);
+
+            Model1.setRowCount(0);
+            Connection cn = cd.getConnection();
+            ArrayList<DauSach> ls = new ArrayList<>();
+
+            try {
+                PreparedStatement ps = cn.prepareStatement(sql);
+                if (sql.contains("LIKE")) {
+                    ps.setString(1, "%" + txtSearchDS.getText() + "%");
+                } else {
+                    ps.setString(1, txtSearchDS.getText());
+                }
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    DauSach st = new DauSach();
+                    st.setMaDauSach(rs.getString("MaDauSach"));
+                    st.setTenSach(rs.getString("TenSach"));
+                    st.setSoLuong(rs.getInt("SoLuong"));
+                    st.setTheLoai(rs.getString("TheLoai"));
+                    st.setTacGia(rs.getString("TacGia"));
+                    st.setNXB(rs.getString("NXB"));
+                    st.setNamXB(rs.getInt("NamXB"));
+                    ls.add(st);
+                }
+
+                for (DauSach s : ls) {
+                    Vector<Object> tbRow1 = new Vector<>();
+                    tbRow1.add(s.getMaDauSach());
+                    tbRow1.add(s.getTenSach());
+                    tbRow1.add(s.getSoLuong());
+                    tbRow1.add(s.getTheLoai());
+                    tbRow1.add(s.getTacGia());
+                    tbRow1.add(s.getNXB());
+                    tbRow1.add(s.getNamXB());
+                    rows1.add(tbRow1);
+                }
+
+                Model1.setDataVector(rows1, columns1);
+                tableDauSach.setModel(Model1);
+
+                // Dọn dẹp sau khi tìm kiếm
+                cbbDauSach.setSelectedIndex(-1);
+                txtSearchDS.setText(null);
+
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
             }
-            
-            for (DauSach s : ls) {
-                Vector<Object> tbRow1 = new Vector<>();
-                tbRow1.add(s.getMaDauSach());
-                tbRow1.add(s.getTenSach());
-                tbRow1.add(s.getSoLuong());
-                tbRow1.add(s.getTheLoai());
-                tbRow1.add(s.getTacGia());
-                tbRow1.add(s.getNXB());
-                tbRow1.add(s.getNamXB());
-                rows1.add(tbRow1);
+
+            if (Model1.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(null, "Không tìm thấy!", "Thông báo", 1);
             }
-            
-            Model1.setDataVector(rows1, columns1);
-            tableDauSach.setModel(Model1);
-            
-            // Dọn dẹp sau khi tìm kiếm
-            cbbDauSach.setSelectedIndex(-1);
-            txtSearchDS.setText(null);
-            
-        } catch (Exception e1) {
-            System.out.println(e1.getMessage());
         }
-        
-        if (Model1.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(null, "Không tìm thấy!", "Thông báo", 1);
-        }
-    }
     }//GEN-LAST:event_btnSearchDauSachActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {

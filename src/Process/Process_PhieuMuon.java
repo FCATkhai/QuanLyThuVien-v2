@@ -125,7 +125,23 @@ public class Process_PhieuMuon {
 	
 	
 	
-	public boolean updatePhieuMuonNgayTra(Date NgayTra, String MaPhieuMuon) {
+	public boolean updatePhieuMuonNgayTraUser(String MaPhieuMuon) {
+		Connection cn = cd.getConnection();
+		String sql = "UPDATE `tb_phieumuon` SET NgayTra = now() where MaPhieuMuon = ?";
+		try {
+			PreparedStatement ps = (PreparedStatement) cn.prepareStatement(sql);
+			ps.setString(1, MaPhieuMuon);
+			ps.executeUpdate();
+			ps.close();
+			JOptionPane.showMessageDialog(null, "Cập nhật thành công!" , "Thông báo", 1);
+			return true;
+		}catch (Exception e) {
+                        System.out.println(e.getMessage());
+			JOptionPane.showMessageDialog(null, "Cập nhật thất bại!" , "Thông báo", 1);
+			return false;
+		}
+	}
+		public boolean updatePhieuMuonNgayTra(Date NgayTra, String MaPhieuMuon) {
 		Connection cn = cd.getConnection();
 		String sql = "UPDATE `tb_phieumuon` SET NgayTra = ? where MaPhieuMuon = ?";
 		try {
@@ -145,7 +161,6 @@ public class Process_PhieuMuon {
 			return false;
 		}
 	}
-	
 	
 	public boolean delPhieuMuonDaTra() {
 		Connection cn = cd.getConnection();

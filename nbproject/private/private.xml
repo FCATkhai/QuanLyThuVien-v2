@@ -3,12 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/DaiHoc/QuanLyThuVien/src/Main/QuanLyThuVien.java</file>
-            <file>file:/D:/DaiHoc/QuanLyThuVien/src/Main/GUI_ChooseLogin.java</file>
-            <file>file:/D:/DaiHoc/QuanLyThuVien/src/GUI_ThuThu/quanLyDauSachCard.java</file>
-            <file>file:/D:/DaiHoc/QuanLyThuVien/src/GUI_NguoiMuon/GUI_NguoiMuon_Menu.java</file>
-            <file>file:/D:/DaiHoc/QuanLyThuVien/src/GUI_ThuThu/GUI_TrangChu.java</file>
-            <file>file:/D:/DaiHoc/QuanLyThuVien/src/GUI_NguoiMuon/GUI_NguoiMuon_Signup.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/Process/Process_PhieuMuon.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/GUI_NguoiMuon/GUI_NguoiMuon_Signup.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/Process/Process_Sach.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/GUI_ThuThu/GUI_TrangChu.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/GUI_ThuThu/quanLySachCard.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/Process/Process_NguoiMuon.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/GUI_NguoiMuon/GUI_NguoiMuon_Menu.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/Main/GUI_ChooseLogin.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/Main/QuanLyThuVien.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/GUI_ThuThu/quanLyNguoiMuonCard.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/Process/Connect_database.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/GUI_ThuThu/GUI_ThongKe.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/Process/Process_DauSach.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/GUI_ThuThu/quanLyDauSachCard.java</file>
+            <file>file:/D:/My%20data/QuanTriHeThong/CT467_Project_v2/src/GUI_ThuThu/quanLyPhieuMuon.java</file>
         </group>
     </open-files>
 </project-private>

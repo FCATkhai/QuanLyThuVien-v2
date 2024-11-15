@@ -217,13 +217,13 @@
                           </Group>
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtDiaChi" alignment="1" pref="249" max="32767" attributes="0"/>
+                              <Component id="txtDiaChi" alignment="1" max="32767" attributes="0"/>
                               <Component id="passwordField1" alignment="1" max="32767" attributes="0"/>
                               <Component id="txtSDT" alignment="1" max="32767" attributes="0"/>
                               <Component id="txtTenNguoiMuon" alignment="1" max="32767" attributes="0"/>
                               <Component id="txtGmail" alignment="1" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="49" max="32767" attributes="0"/>
+                          <EmptySpace pref="50" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -419,63 +419,8 @@
         </Constraint>
       </Constraints>
 
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace min="110" pref="110" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="240" pref="240" max="-2" attributes="0"/>
-                          <Component id="jLabel12" min="-2" pref="210" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="jLabel14" min="-2" pref="280" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <Component id="jLabel8" min="-2" pref="390" max="-2" attributes="0"/>
-              <Group type="102" attributes="0">
-                  <EmptySpace min="330" pref="330" max="-2" attributes="0"/>
-                  <Component id="jLabel9" min="-2" pref="380" max="-2" attributes="0"/>
-              </Group>
-              <Group type="102" attributes="0">
-                  <EmptySpace min="150" pref="150" max="-2" attributes="0"/>
-                  <Component id="jLabel10" min="-2" pref="460" max="-2" attributes="0"/>
-              </Group>
-              <Group type="102" attributes="0">
-                  <EmptySpace min="170" pref="170" max="-2" attributes="0"/>
-                  <Component id="jLabel11" min="-2" pref="350" max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel12" min="-2" pref="150" max="-2" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="60" pref="60" max="-2" attributes="0"/>
-                          <Component id="jLabel14" min="-2" pref="80" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace min="30" pref="30" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="110" pref="110" max="-2" attributes="0"/>
-                          <Component id="jLabel8" min="-2" pref="350" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="30" pref="30" max="-2" attributes="0"/>
-                          <Component id="jLabel9" min="-2" pref="370" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="jLabel10" min="-2" pref="480" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <Group type="102" attributes="0">
-                  <EmptySpace min="130" pref="130" max="-2" attributes="0"/>
-                  <Component id="jLabel11" min="-2" pref="80" max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="false"/>
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel8">
@@ -488,6 +433,11 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="-40" y="280" width="390" height="350"/>
+            </Constraint>
+          </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">
           <Properties>
@@ -495,6 +445,11 @@
               <Image iconType="3" name="/Images/bookshelf2.png"/>
             </Property>
           </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="110" y="170" width="460" height="480"/>
+            </Constraint>
+          </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
@@ -502,6 +457,11 @@
               <Image iconType="3" name="/Images/bookshelf1.png"/>
             </Property>
           </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="290" y="200" width="380" height="370"/>
+            </Constraint>
+          </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel12">
           <Properties>
@@ -509,6 +469,11 @@
               <Image iconType="3" name="/Images/lightb (1).png"/>
             </Property>
           </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="310" y="-10" width="210" height="150"/>
+            </Constraint>
+          </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel11">
           <Properties>
@@ -520,6 +485,11 @@
             </Property>
             <Property name="text" type="java.lang.String" value="new user"/>
           </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="130" y="120" width="350" height="80"/>
+            </Constraint>
+          </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel14">
           <Properties>
@@ -531,6 +501,11 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Welcome"/>
           </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="70" y="50" width="280" height="80"/>
+            </Constraint>
+          </Constraints>
         </Component>
       </SubComponents>
     </Container>

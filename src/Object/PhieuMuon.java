@@ -5,9 +5,10 @@ import java.util.Date;
 public class PhieuMuon {
 	private String MaPhieuMuon, MaSach, MaNguoiMuon;
 	private Date NgayMuon, HanTra, NgayTra;
-	
+        private Sach sach;
 	public PhieuMuon() {
 		super();
+                this.sach = new Sach();
 	}
 
 	public PhieuMuon(String maPhieuMuon, String maSach, String maNguoiMuon, Date ngayMuon, Date hanTra, Date ngayTra) {
@@ -67,6 +68,24 @@ public class PhieuMuon {
 	public void setNgayTra(Date ngayTra) {
 		NgayTra = ngayTra;
 	}
+
+    // Tạo các phương thức setTenSach và setTrangThai để lấy dữ liệu từ lớp Sach
+        public void setTenSach(String tenSach) {
+            sach.setTenSach(tenSach);  // Lấy tên sách từ đối tượng Sach
+        }
+
+        public void setTrangThai(String trangThai) {
+            sach.setTrangThai(trangThai);
+        }
+
+        public String getTenSach() {
+            return sach.getTenSach();
+        }
+
+        public String getTrangThai() {
+            return sach.getTrangThai();
+        }
+
 	
 
 	
