@@ -83,8 +83,14 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel9 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         UserAccountInput = new javax.swing.JTextField();
@@ -94,20 +100,67 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jToggleButton1 = new javax.swing.JToggleButton();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(500, 350));
+        setPreferredSize(new java.awt.Dimension(800, 400));
         setResizable(false);
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(0, 100));
+        jPanel9.setPreferredSize(new java.awt.Dimension(400, 486));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/home img 400.jpg"))); // NOI18N
+        jLabel4.setPreferredSize(jPanel9.getPreferredSize());
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        getContentPane().add(jPanel9, java.awt.BorderLayout.LINE_START);
+
+        jPanel1.setBackground(new java.awt.Color(255, 101, 101));
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 100));
         jPanel1.setVerifyInputWhenFocusTarget(false);
         jPanel1.setLayout(new java.awt.BorderLayout());
 
+        jPanel2.setPreferredSize(new java.awt.Dimension(777, 100));
+        jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Hệ thống quản lý thư viện");
+        jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel3.setPreferredSize(new java.awt.Dimension(265, 100));
+        jPanel2.add(jLabel3);
+
+        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_START);
+
+        jPanel4.setBackground(new java.awt.Color(248, 233, 233));
         jPanel4.setPreferredSize(new java.awt.Dimension(300, 200));
         jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jPanel3.setPreferredSize(new java.awt.Dimension(535, 50));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel4.add(jPanel3, java.awt.BorderLayout.PAGE_END);
+
+        jPanel8.setPreferredSize(new java.awt.Dimension(300, 486));
+        jPanel8.setLayout(new java.awt.GridBagLayout());
 
         jPanel5.setPreferredSize(new java.awt.Dimension(100, 50));
         jPanel5.setLayout(new java.awt.GridBagLayout());
@@ -120,7 +173,7 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
         UserAccountInput.setForeground(new java.awt.Color(204, 204, 204));
         UserAccountInput.setText("Nhập tài khoản...");
         UserAccountInput.setToolTipText("");
-        UserAccountInput.setPreferredSize(new java.awt.Dimension(200, 30));
+        UserAccountInput.setPreferredSize(new java.awt.Dimension(250, 30));
         UserAccountInput.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 UserAccountInputFocusGained(evt);
@@ -136,19 +189,27 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
         });
         jPanel5.add(UserAccountInput, new java.awt.GridBagConstraints());
 
-        jPanel4.add(jPanel5, java.awt.BorderLayout.PAGE_START);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.ipadx = 240;
+        jPanel8.add(jPanel5, gridBagConstraints);
 
-        jPanel6.setPreferredSize(new java.awt.Dimension(100, 25));
+        jPanel6.setPreferredSize(new java.awt.Dimension(100, 50));
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setText("Mật Khẩu:");
+        jLabel1.setPreferredSize(new java.awt.Dimension(54, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         jPanel6.add(jLabel1, gridBagConstraints);
 
         UserPasswordInput.setForeground(new java.awt.Color(204, 204, 204));
         UserPasswordInput.setText("Nhập mật khẩu...");
-        UserPasswordInput.setPreferredSize(new java.awt.Dimension(200, 30));
+        UserPasswordInput.setPreferredSize(new java.awt.Dimension(250, 30));
         UserPasswordInput.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 UserPasswordInputFocusGained(evt);
@@ -164,9 +225,15 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
         });
         jPanel6.add(UserPasswordInput, new java.awt.GridBagConstraints());
 
-        jPanel4.add(jPanel6, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.ipadx = 250;
+        jPanel8.add(jPanel6, gridBagConstraints);
 
-        jPanel7.setPreferredSize(new java.awt.Dimension(529, 80));
+        jPanel4.add(jPanel8, java.awt.BorderLayout.CENTER);
+
+        jPanel7.setPreferredSize(new java.awt.Dimension(529, 150));
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
         jButton1.setText("Đăng nhập");
@@ -177,7 +244,9 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(-70, 10, 0, 0);
         jPanel7.add(jButton1, gridBagConstraints);
 
         jToggleButton1.setText("Đăng ký");
@@ -188,7 +257,7 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(-70, 10, 0, 0);
         jPanel7.add(jToggleButton1, gridBagConstraints);
 
         jPanel4.add(jPanel7, java.awt.BorderLayout.PAGE_END);
@@ -196,32 +265,6 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
         jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
-
-        jPanel2.setPreferredSize(new java.awt.Dimension(777, 70));
-        jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
-
-        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Hệ thống quản lý thư viện");
-        jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel2.add(jLabel3);
-
-        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
-
-        jPanel3.setPreferredSize(new java.awt.Dimension(535, 50));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 535, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -231,18 +274,89 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_UserAccountInputActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String username = UserAccountInput.getText(); // Lấy nội dung (text) từ TextField (UserAccountInput) và gán nó vào username
-        String password = UserPasswordInput.getText(); // Lấy nội dung (text) từ TextField (UserPasswordInput) và gán nó vào password
-        Boolean result = Connect_database.login(username,password); //Đăng nhập bằng username và password trả về kết quả
-        
-        if(result==true){
-            GUI_TrangChu mainPage = new GUI_TrangChu();
-            mainPage.setVisible(true);
-            this.setVisible(false);
-        } else try {
-            this.login(username, password);
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+        String input = UserAccountInput.getText(); // Get input from TextField
+        String password = UserPasswordInput.getText(); // Get Password from TextField
+        String account = null;
+        boolean isAdmin = false;
+
+        try {
+            // Nếu input có chứa @ thì chắc chắn là người dùng đăng nhập bằng email
+            if (input.contains("@")) {
+                // Lấy email từ bảng tb_nguoimuon và lấy ra cột MaNguoiMuon có email = gmail
+                String sql_get_account = "SELECT MaNguoiMuon FROM tb_nguoimuon WHERE Gmail=?";
+                Connection cn = Connect_database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(sql_get_account);
+                ps.setString(1, input); // Set email in PreparedStatement
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    // Retrieve MaNguoiMuon if a matching Gmail is found
+                    account = rs.getString("MaNguoiMuon"); // Set account with MaNguoiMuon
+                    isAdmin = false; // User is not admin
+
+                    // Attempt user login (using MaNguoiMuon as the username)
+                    if (Connect_database.login(account, password, isAdmin)) {
+                        GUI_NguoiMuon_Menu userMenu = new GUI_NguoiMuon_Menu(account); // User menu page
+                        userMenu.setVisible(true);
+                        this.setVisible(false);
+                    } else {
+                        System.out.println("User login failed. Incorrect Email or Password.");
+                    }
+                } else {
+                    System.out.println("No account found for the given email.");
+                }
+            } else {
+                // Nếu input không chứa @, có thể là người dùng hoặc admin đăng nhập bằng username
+                Connection cn = Connect_database.getConnection();
+                PreparedStatement ps;
+                ResultSet rs;
+
+                // First, check if the input corresponds to an admin (in librarian table)
+                String sql_check_admin = "SELECT Username FROM librarian WHERE Username=?";
+                ps = cn.prepareStatement(sql_check_admin);
+                ps.setString(1, input); // Check if the username exists in the librarian table (admin)
+                rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    // Admin login
+                    account = input; // Set account as admin username
+                    isAdmin = true; // Set flag to true for admin login
+
+                    // Attempt admin login
+                    if (Connect_database.login(account, password, isAdmin)) {
+                        GUI_TrangChu mainPage = new GUI_TrangChu(); // Admin main page
+                        mainPage.setVisible(true);
+                        this.setVisible(false);
+                    } else {
+                        System.out.println("Admin login failed. Incorrect Username or Password.");
+                    }
+                } else {
+                    // Not found in admin table, check for regular user in the users table
+                    String sql_check_user = "SELECT Username FROM user WHERE Username=?";
+                    ps = cn.prepareStatement(sql_check_user);
+                    ps.setString(1, input); // Check if the username exists in the users table (regular user)
+                    rs = ps.executeQuery();
+
+                    if (rs.next()) {
+                        // Regular user login
+                        account = input; // Set account as user username
+                        isAdmin = false; // User is not admin
+
+                        // Attempt regular user login
+                        if (Connect_database.login(account, password, isAdmin)) {
+                            GUI_NguoiMuon_Menu userMenu = new GUI_NguoiMuon_Menu(account);
+                            userMenu.setVisible(true);
+                            dispose();
+                        } else {
+                            System.out.println("User login failed. Incorrect Username or Password.");
+                        }
+                    } else {
+                        System.out.println("No account found for the given username.");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -326,6 +440,7 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -333,6 +448,8 @@ public class GUI_ChooseLogin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }

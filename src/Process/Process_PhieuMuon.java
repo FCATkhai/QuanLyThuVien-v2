@@ -65,16 +65,13 @@ public class Process_PhieuMuon {
 			System.out.println("transaction thành công");
 			return true;
 		}catch (SQLException e) {
-			if (cn != null) {
-				try {
-					cn.rollback();
-					System.out.println("Transaction bị rollback do lỗi: " + e.getMessage());
-				}
-				catch (SQLException rollbackEx) {
-					rollbackEx.printStackTrace();
-				}
-			}
-			return false;
+            try {
+                cn.rollback();
+                System.out.println("Transaction bị rollback do lỗi: " + e.getMessage());
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            return false;
 		}
 		finally {
 			// Đóng kết nối
@@ -88,7 +85,7 @@ public class Process_PhieuMuon {
 			}
 		}
 	}
-	
+        
 	public boolean updatePhieuMuon(String MaPhieuMuon, Date NgayMuon, Date HanTra, String MaSach, String MaNguoiMuon) {
 		Connection cn = cd.getConnection();
 		String sql = "UPDATE `tb_phieumuon` SET NgayMuon = ?, HanTra = ? , MaSach = ? , MaNguoiMuon = ? where MaPhieuMuon = ?";

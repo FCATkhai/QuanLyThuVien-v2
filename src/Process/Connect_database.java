@@ -22,25 +22,43 @@ public class Connect_database {
 		return cn;
 	}
 	
-	public  static boolean login(String user, String password) {
-		Connection cn = getConnection();
-		boolean kq = false;
-		String sql_login = "select * from librarian where username = ? and password = ?;";
-		try {
-			PreparedStatement ps = cn.prepareStatement(sql_login);
-			ps.setString(1, user);
-			ps.setString(2, password);
-			ResultSet rs = ps.executeQuery();
-			while(rs.next()) {
-				kq = true;
-			}
-		} catch (Exception e) {
-                        System.out.println(e.getMessage());
-			return false;
-		}
-		return kq;
-		
+	public  static boolean login(String user, String password, boolean isAdmin) {
+            Connection cn = getConnection();
+            boolean kq = false;
 
+            String sql_login_admin = "SELECT * FROM librarian WHERE username = ? AND password = ?";
+            String sql_login_user = "SELECT * FROM user WHERE username = ? AND password = ?";
+
+            try {
+                PreparedStatement ps;
+                if (isAdmin) {
+                    // Nếu trong bảng librarian
+                    ps = cn.prepareStatement(sql_login_admin);
+                } else {
+                    // Nếu trong bảng users
+                    ps = cn.prepareStatement(sql_login_user);
+                }
+                ps.setString(1, user);
+                ps.setString(2, password);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    kq = true; // Đăng nhập thành công
+                }
+
+                rs.close();
+                ps.close();
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            } finally {
+                try {
+                    if (cn != null) cn.close();
+                } catch (Exception e) {
+                    System.out.println("Error closing connection: " + e.getMessage());
+                }
+            }
+
+            return kq;
 	}
 	public static void main(String[] args) {
 

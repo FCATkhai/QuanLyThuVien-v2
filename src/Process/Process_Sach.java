@@ -77,7 +77,7 @@ Connect_database cd = new Connect_database();
 	
 	
 	
-	public boolean updateSachTrangThai(String MaSach) {
+	public boolean updateSachTrangThai_DaMuon(String MaSach) {
 		Connection cn = cd.getConnection();
 		String sql = "UPDATE `tb_sach` SET `TrangThai` = 'Đã mượn' WHERE (`MaSach` = ?);";
 		try {
@@ -92,20 +92,29 @@ Connect_database cd = new Connect_database();
 		}
 	}
 	
-	public boolean updateSachTrangThai2(String MaSach) {
-		Connection cn = cd.getConnection();
-		String sql = "UPDATE `tb_sach` SET `TrangThai` = 'Còn' WHERE (`MaSach` = ?);";
-		try {
-			PreparedStatement ps = (PreparedStatement) cn.prepareStatement(sql);
-			ps.setString(1, MaSach);
-			ps.executeUpdate();
-			cn.close();
-			return true;
-		} catch (Exception e) {
+        public boolean updateSachTrangThai_Con(String MaSach) {
+            Connection cn = null;
+            PreparedStatement ps = null;
+            try {
+                cn = cd.getConnection();  // Kết nối tới cơ sở dữ liệu
+                String sql = "UPDATE tb_sach SET TrangThai = 'Còn' WHERE MaSach = ?";
+                ps = cn.prepareStatement(sql);
+                ps.setString(1, MaSach);  // Set MaSach vào PreparedStatement
+                int rowsAffected = ps.executeUpdate();
 
-			return false;
-		}
-	}
+                return rowsAffected > 0;  // Nếu có bản ghi được cập nhật, trả về true
+            } catch (SQLException e) {
+                System.out.println("Lỗi khi cập nhật trạng thái sách: " + e.getMessage());
+                return false;  // Nếu có lỗi xảy ra, trả về false
+            } finally {
+                try {
+                    if (ps != null) ps.close();
+                    if (cn != null) cn.close();
+                } catch (SQLException e) {
+                    System.out.println("Lỗi khi đóng tài nguyên: " + e.getMessage());
+                }
+            }
+        }
 	
 	public boolean delSach(String MaSach) {
 		Connection cn = cd.getConnection();

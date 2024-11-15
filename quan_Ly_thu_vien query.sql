@@ -82,6 +82,27 @@ BEGIN
 END$$
 DELIMITER ;
 
+--           function
+-- #############################
+DROP FUNCTION IF EXISTS GetTotalBooks;
+DELIMITER $$
+CREATE FUNCTION GetTotalBooks() 
+RETURNS INT
+READS SQL DATA
+BEGIN
+    DECLARE TotalBooks INT;
+
+    SELECT COUNT(*)
+    INTO TotalBooks
+    FROM tb_sach;
+
+    RETURN TotalBooks;
+END$$
+DELIMITER ;
+
+
+
+
 -- CALL getSachDaMuonByMaNguoiMuon('MN001'); 
 
 -- drop table user;
