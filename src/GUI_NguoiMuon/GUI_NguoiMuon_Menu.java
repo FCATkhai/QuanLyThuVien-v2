@@ -67,10 +67,12 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
 
         Connection cn = cd.getConnection();
         try{
-            String sql1 = "Select sum(Soluong)  as slsach from tb_dausach;";
-            PreparedStatement ps1 = (PreparedStatement) cn.prepareStatement(sql1);
-            ResultSet rs1 = ps1.executeQuery();
-            if(rs1.next()) labelSLSach.setText(Integer.toString(rs1.getInt("slsach")));           
+            String sql1 = "{ ? = CALL GetTotalBooks() }";
+            CallableStatement cs1 = cn.prepareCall(sql1);
+            cs1.registerOutParameter(1, Types.INTEGER);
+            cs1.execute();
+
+            labelSLSach.setText(Integer.toString(cs1.getInt(1)));
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -176,8 +178,19 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         tableMuon.setModel(Model1);
     }
 
-    
+    // Method to insert a loan record (PhieuMuon)
 
+
+    public boolean updatePMNgayTra(String MaPhieuMuon) {
+        if(ppm.updatePhieuMuonNgayTra(null, MaPhieuMuon)) {
+            ps.updateSachTrangThai_Con(MaPhieuMuon);
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
     // Tra sach card
     public void getTableSachDaMuon() {
         Model2.setRowCount(0);
@@ -211,9 +224,9 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
         columnsMuon.add("Trạng thái");
         columnsMuon.add("Mã đầu sách");
         getTableMuon();
-        columnsTra.add("Mã Phiếu mượn");
-        columnsTra.add("Mã Sách");
-        columnsTra.add("Tên Sách");
+        columnsTra.add("Mã phiếu mượn");
+        columnsTra.add("Mã sách");
+        columnsTra.add("Tên sách");
         columnsTra.add("Ngày mượn");
         columnsTra.add("Hạn trả");
         columnsTra.add("Ngày trả");
@@ -1176,7 +1189,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
            if (insertPhieuMuon(maSach, maNguoiMuon)) {
                // Update the book status after successful loan
                Process_Sach ps = new Process_Sach();
-               ps.updateSachTrangThai(maSach);
+               ps.updateSachTrangThai_DaMuon(maSach);
 
                // Clear the labels for the next operation
                labelMaSach.setText(null);
@@ -1230,7 +1243,7 @@ public final class GUI_NguoiMuon_Menu extends javax.swing.JFrame {
                 // Cập nhật trạng thái sách thành "Còn" sau khi trả sách
                 Process_Sach ps = new Process_Sach();
                 System.out.println(labelMaSach_TraSach.getText());
-                if (ps.updateSachTrangThai2(labelMaSach_TraSach.getText())) {
+                if (ps.updateSachTrangThai_Con(labelMaSach_TraSach.getText())) {
                     System.out.println("Trạng thái sách đã được cập nhật thành 'Còn'.");
                 } else {
                     System.out.println("Cập nhật trạng thái sách thất bại.");
