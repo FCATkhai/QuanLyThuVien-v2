@@ -54,7 +54,7 @@ Connect_database cd = new Connect_database();
 			ps.setString(5, SDT);
 			ps.executeUpdate();
 			ps.close();
-			JOptionPane.showMessageDialog(null, "Đã thêm khách hàng thành công!" , "Thông báo", 1);
+			JOptionPane.showMessageDialog(null, "Đã thêm người mượn thành công!" , "Thông báo", 1);
 			return true;
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Thêm thất bại!" , "Thông báo", 1);
